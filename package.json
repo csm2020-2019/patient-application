@@ -1,0 +1,17 @@
+{
+  "name": "patient-application",
+  "version": "1.0.0",
+  "description": "Web-based patient application",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.dcs.aber.ac.uk/csm2020/patient-application.git"
+  }
+  "license": "MIT"
+}

@@ -1,0 +1,51 @@
+{
+  "name": "csm2020/patient-application",
+  "description": "Web-based patient application",
+  "homepage": "https://gitlab.dcs.aber.ac.uk/csm2020/patient-application",
+  "type": "project",
+  "require": {
+    "php": "^5.6.35",
+    "filp/whoops": "",
+    "twig/twig": "~1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^5.0",
+    "phpmd/phpmd": "^2.6"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Oliver Earl",
+      "email": "ole4@aber.ac.uk"
+    },
+    {
+      "name": "Safouh Dahlan",
+      "email": "sad26@aber.ac.uk"
+    },
+    {
+      "name": "Nick Maslin",
+      "email": "nim43@aber.ac.uk"
+    },
+    {
+      "name": "Kelechi Okwuriki",
+      "email": "keo12@aber.ac.uk"
+    },
+    {
+      "name": "Will Robinson",
+      "email": "Wgr@aber.ac.uk"
+    },
+    {
+      "name": "Elliot Sheehy",
+      "email": "els41@aber.ac.uk"
+    },
+    {
+      "name": "Lucas Ridge",
+      "email": "lur16@aber.ac.uk"
+    }
+  ],
+  "config": {
+    "preferred-install": "dist",
+    "sort-packages": true,
+    "optimize-autoloader": true
+  }
+}
