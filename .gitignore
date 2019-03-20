@@ -3,7 +3,7 @@
 # Edit at https://www.gitignore.io/?templates=node,macos,linux,windows,composer,phpstorm+all,phpcodesniffer,visualstudiocode
 
 ### Application-specific
-settings.php
+settings.ini
 
 ### Composer ###
 # composer.phar
