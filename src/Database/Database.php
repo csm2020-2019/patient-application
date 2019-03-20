@@ -23,6 +23,7 @@ class Database
             die();
         }
     }
+
     private function __clone(){}
 
     public static function getDatabase()

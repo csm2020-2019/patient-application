@@ -25,7 +25,7 @@
       "email": "nim43@aber.ac.uk"
     },
     {
-      "name": "Kelechi Okwuriki",
+      "name": "Kelechi 'Matthew' Okwuriki",
       "email": "keo12@aber.ac.uk"
     },
     {
@@ -45,5 +45,16 @@
     "preferred-install": "dist",
     "sort-packages": true,
     "optimize-autoloader": true
+  },
+  "autoload": {
+    "psr-4": {
+      "csm2020\\PatientApp\\": "src/",
+      "csm2020\\PatientApp\\Tests\\": "tests/",
+      "csm2020\\PatientApp\\Config\\": "src/Config",
+      "csm2020\\PatientApp\\Controllers\\": "src/Controllers",
+      "csm2020\\PatientApp\\Database\\": "src/Database",
+      "csm2020\\PatientApp\\Models\\": "src/Models",
+      "csm2020\\PatientApp\\Router\\": "src/Router"
+    }
   }
 }

@@ -2,6 +2,9 @@
 
 namespace csm2020\PatientApp;
 
+use csm2020\PatientApp\Config\Config;
+use csm2020\PatientApp\Database\Database;
+
 class PatientApp
 {
     private static $instance;
@@ -14,7 +17,7 @@ class PatientApp
     {
         $this->config = Config::getConfig();
         $this->database = Database::getDatabase();
-        $this->router = Router::getRouter();
+        //$this->router = Router::getRouter();
     }
 
     public static function init()
@@ -27,6 +30,7 @@ class PatientApp
 
     public function run()
     {
-        $this->router->route();
+        //$this->router->route();
+        //var_dump(self::$instance);
     }
 }
