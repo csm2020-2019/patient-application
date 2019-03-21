@@ -3,6 +3,7 @@ namespace csm2020\PatientApp\Authentication;
 
 use Firebase\JWT\JWT;
 
+use Exception;
 use PDO;
 
 use csm2020\PatientApp\Database\Database;
@@ -38,7 +39,7 @@ class Authentication
         // Alas, this can't be brought in until the Java client has it implemented too.
         $db = Database::getDatabase();
         $statement = $db->prepare(
-            "SELECT * FROM user WHERE username = :username AND userPassword = :password LIMIT 1");
+            "SELECT * FROM user WHERE username = :username AND userPassword = :password AND userType = 'patient' LIMIT 1");
         $statement->bindParam('username', $sanitisedUsername);
         $statement->bindParam('password', $sanitisedPassword);
         $statement->execute();
