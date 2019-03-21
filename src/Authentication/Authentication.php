@@ -6,28 +6,37 @@ use Firebase\JWT\JWT;
 use Exception;
 use PDO;
 
+use csm2020\PatientApp\Config\Config;
 use csm2020\PatientApp\Database\Database;
 
 class Authentication
 {
-    const SECRET_KEY =          '2@y$e^4efeqjqb2f+8xp&#yp4%4ku@e+^qcx_x0gz4id6t1jb&'; // predetermined base64 key
-    const ALGORITHM =           'HS512';
-    const SERVER_NAME =         'http://users.aber.ac.uk/ole4/';
     const UNAUTHORISED_JSON =   ['status' => 'error', 'msg' => 'Unauthorised'];
 
-    private function __construct() {}
+    private $secretKey;
+    private $algorithm;
+    private $serverName;
+
+    public function __construct()
+    {
+        $config = Config::getConfig();
+
+        $this->secretKey =  $config['auth-secret-key'];
+        $this->algorithm =  $config['auth-algorithm'];
+        $this->serverName = $config['server-url'];
+    }
     private function __clone() {}
 
-    public static function login()
+    public function login()
     {
         if (!isset($_POST['username']) || !isset($_POST['password'])) {
             return json_encode(self::UNAUTHORISED_JSON);
         }
-        return self::authenticate($_POST['username'], $_POST['password']);
+        return $this->authenticate($_POST['username'], $_POST['password']);
     }
 
     // http://phpclicks.com/php-token-based-authentication/
-    private static function authenticate($username, $password)
+    private function authenticate($username, $password)
     {
         //$username = 'test';
         //$password = 'test';
@@ -35,7 +44,7 @@ class Authentication
         $sanitisedUsername = trim(stripslashes(htmlspecialchars(strip_tags($username))));
         $sanitisedPassword = trim(stripslashes(htmlspecialchars(strip_tags($password))));
 
-        // Hashing really should be included at some point. Plaintext passwords are not good.
+        // TODO: Hashing really should be included at some point. Plaintext passwords are not good.
         // Alas, this can't be brought in until the Java client has it implemented too.
         $db = Database::getDatabase();
         $statement = $db->prepare(
@@ -49,7 +58,7 @@ class Authentication
             $issueTime =            time();
             $noExpirationBefore =   $issueTime + 10;
             $expireTime =           $noExpirationBefore + 7200;
-            $serverName =           self::SERVER_NAME;
+            $serverName =           $this->serverName;
 
             $tokenData = [
                 'iat' => $issueTime,
@@ -62,11 +71,11 @@ class Authentication
                     'name' => $row[0]['username']
                 ]
             ];
-            $secretKey = base64_decode(self::SECRET_KEY);
+            $secretKey = base64_decode($this->secretKey);
             $jwt = JWT::encode(
                 $tokenData,
                 $secretKey,
-                self::ALGORITHM
+                $this->algorithm
             );
 
             $jsonArray = ['status' => 'success', 'resp' => ['jwt' => $jwt]];
@@ -75,11 +84,11 @@ class Authentication
         return json_encode(self::UNAUTHORISED_JSON);
     }
 
-    public static function tokenAuthenticate($token)
+    public function tokenAuthenticate($token)
     {
         try {
-            $secretKey = base64_decode(self::SECRET_KEY);
-            $decodedData = JWT::decode($token, $secretKey, [self::ALGORITHM]);
+            $secretKey = base64_decode($this->secretKey);
+            $decodedData = JWT::decode($token, $secretKey, [$this->algorithm]);
             return json_encode(['status' => 'success', 'data' => $decodedData]);
         } catch (Exception $e) {
             return json_encode(self::UNAUTHORISED_JSON);

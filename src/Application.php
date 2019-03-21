@@ -12,12 +12,14 @@ class PatientApp
     private $config;
     private $database;
     private $router;
+    private $auth;
 
     private function __construct()
     {
         $this->config = Config::getConfig();
         $this->database = Database::getDatabase();
         //$this->router = new Router();
+        $this->auth = new Authentication();
     }
 
     public static function init()
@@ -31,7 +33,7 @@ class PatientApp
     public function run()
     {
         header("Content-Type: application/json; charset=UTF-8");
-        echo Authentication::login();
+        echo $this->auth->login();
         //$this->router->route();
         //var_dump(self::$instance);
     }
