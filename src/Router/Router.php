@@ -26,19 +26,19 @@ class Router
             if (!$loginCheck) {
                 return $this->returnError(self::UNAUTHORISED);
             }
-            return json_encode($loginCheck);
+            return $this->success($loginCheck, 200);
         }
 
         // Time to check token and do the rest of the routing
         $tokenCheck = $this->auth->tokenAuthenticate($_POST['token']);
         if (!isset($tokenCheck)) {
-            return json_encode($this->returnError(self::UNAUTHORISED));
+            return $this->error(self::UNAUTHORISED);
         }
         $this->json = $tokenCheck;
 
         // Did they send a request?
         if (!isset($_POST['request'])) {
-            return $this->returnError(self::NO_COMMAND, $tokenCheck);
+            return $this->error(self::NO_COMMAND, $tokenCheck);
         }
 
         // In a modern PHP framework, this would be like a list of routes. Yeah.
@@ -50,22 +50,28 @@ class Router
                 // Spin up the controller and do stuff
                 break;
             default:
-                return $this->returnError(self::UNRECOGNISED_COMMAND, $tokenCheck);
+                return $this->error(self::UNRECOGNISED_COMMAND, $tokenCheck);
                 break;
         }
-        return json_encode($this->json);
+        $this->setResponseCode(200);
+        return $this->success($this->json, 200);
     }
 
-    private function returnError(String $errorCode, array $auth = null): String
+    private function success(array $data, int $code = 200)
+    {
+        $this->setResponseCode($code);
+        return json_encode($data);
+    }
+    private function error(String $errorCode, array $auth = null): String
     {
         $this->setResponseCode($errorCode);
         return json_encode(['status' => 'error', 'message' => $errorCode, 'auth' => $auth ?? null]);
     }
 
-    private function setResponseCode($errorCode)
+    private function setResponseCode($code)
     {
         $responseCode = 200; // OK is default
-        switch ($errorCode) {
+        switch ($code) {
             case self::UNRECOGNISED_COMMAND:
             case self::NO_COMMAND:
                 $responseCode = 400;
@@ -73,6 +79,7 @@ class Router
             case self::UNAUTHORISED:
                 $responseCode = 403; // I know this is technically forbidden
                 break;
+            case 200:
             default:
                 $responseCode = 200;
                 break;
