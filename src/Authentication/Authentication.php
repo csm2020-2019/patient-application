@@ -29,14 +29,14 @@ class Authentication
 
     public function login()
     {
-        if (!isset($_POST['username']) || !isset($_POST['password'])) {
+        if (!isset($_POST['username']) || !isset($_POST['current-password'])) {
             return null;
         }
-        return $this->authenticate($_POST['username'], $_POST['password']);
+        return $this->authenticate($_POST['username'], $_POST['current-password']);
     }
 
     // http://phpclicks.com/php-token-based-authentication/
-    private function authenticate(String $username, String $password): array
+    private function authenticate(String $username, String $password)
     {
         //$username = 'test';
         //$password = 'test';
@@ -84,7 +84,7 @@ class Authentication
         return null;
     }
 
-    public function tokenAuthenticate(String $token): array
+    public function tokenAuthenticate(String $token)
     {
         try {
             $secretKey = base64_decode($this->secretKey);

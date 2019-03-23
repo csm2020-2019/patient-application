@@ -3,30 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <title>Token Test</title>
-  <script
-    src="http://code.jquery.com/jquery-3.3.1.min.js"
-    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-    crossorigin="anonymous"></script>
 </head>
 <body>
 
 <form name="login" id="login" method="POST">
   <fieldset>
-    <input type="hidden" name="token" id="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE1NTMzNDY5NzgsImp0aSI6ImZ5cUtSazNoZ3RvSXZ1NFNlWFVcLzJFbEZCWGpyRFU0ZEo2RUc3d1ExdXFRPSIsImlzcyI6Imh0dHA6XC9cL3VzZXJzLmFiZXIuYWMudWtcL29sZTRcLyIsIm5iZiI6MTU1MzM0Njk4OCwiZXhwIjoxNTUzMzU0MTg4LCJkYXRhIjp7ImlkIjoiMiIsIm5hbWUiOiJ3aWJibGUifX0.f0_9TbFRvTTjQzF3V6kxhuIWr6kI_VyvVIP7i-KFQuvqdYB7jGUZK81K7_AgHwvzmOsUu7TsmETDSKia5IuRGQ">
-  </fieldset>
-  <fieldset>
     <label for="request">Command</label>
     <input type="text" name="request" id="request" required>
+    <input type="hidden" name="token" id="token" value="">
   </fieldset>
   <input type="submit" name="button" id="button" value="Submit">
   <p id="results">
 
   </p>
 </form>
+<script
+  src="http://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
 <script>
-  let form = $('#login');
-  form.submit(function (e) {
+  $('#login').submit(function (e) {
     e.preventDefault();
+
+    let token = cookieExtractor(document.cookie);
+    $('#token').attr('value', token);
 
     let form = $(this);
     let url = 'api.php';
@@ -38,9 +38,29 @@
       success: function(data)
       {
         alert(JSON.stringify(data));
+      },
+      error: function(data)
+      {
+        alert(JSON.stringify(data));
       }
     });
-  })
+  });
+
+  const cookieExtractor = function(cookie) {
+    let name = `token=`;
+    let decodedCookie = decodeURIComponent(cookie);
+    let ca = decodedCookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) === ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) === 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return '';
+  }
 </script>
 </body>
 </html>

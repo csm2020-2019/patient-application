@@ -5,9 +5,9 @@ use csm2020\PatientApp\Authentication\Authentication;
 
 class Router
 {
-    const UNAUTHORISED =            'Unauthorised';
-    const NO_COMMAND =              'Authenticated, but no command specified';
-    const UNRECOGNISED_COMMAND =    'Authenticated, but unrecognised command specified';
+    const UNAUTHORISED = 'Unauthorised';
+    const NO_COMMAND = 'Authenticated, but no command specified';
+    const UNRECOGNISED_COMMAND = 'Authenticated, but unrecognised command specified';
 
     private $auth;
     private $json = [];
@@ -20,9 +20,6 @@ class Router
 
     public function route(): String
     {
-        // Set any headers first
-        $this->setHeaders();
-
         // Check if there's no token, if so, we need to do initial authentication
         if (!isset($_POST['token'])) {
             $loginCheck = $this->auth->login();
@@ -41,24 +38,46 @@ class Router
 
         // Did they send a request?
         if (!isset($_POST['request'])) {
-            return $this->returnError(self::NO_COMMAND);
+            return $this->returnError(self::NO_COMMAND, $tokenCheck);
         }
 
         // In a modern PHP framework, this would be like a list of routes. Yeah.
         switch ($_POST['request']) {
+            case 'all':
+                // Return everything;
+                break;
+            case 'programmes':
+                // Spin up the controller and do stuff
+                break;
             default:
-                $this->json['response'] = 'Hello World';
+                return $this->returnError(self::UNRECOGNISED_COMMAND, $tokenCheck);
+                break;
         }
         return json_encode($this->json);
     }
 
     private function returnError(String $errorCode, array $auth = null): String
     {
-       return json_encode(['status' => 'error', 'message' => $errorCode, 'response' => $auth ?? null]);
+        $this->setResponseCode($errorCode);
+        return json_encode(['status' => 'error', 'message' => $errorCode, 'auth' => $auth ?? null]);
     }
 
-    private function setHeaders()
+    private function setResponseCode($errorCode)
     {
-        header("Content-Type: application/json; charset=UTF-8");
+        $responseCode = 200; // OK is default
+        switch ($errorCode) {
+            case self::UNRECOGNISED_COMMAND:
+            case self::NO_COMMAND:
+                $responseCode = 400;
+                break;
+            case self::UNAUTHORISED:
+                $responseCode = 403; // I know this is technically forbidden
+                break;
+            default:
+                $responseCode = 200;
+                break;
+        }
+        http_response_code($responseCode);
     }
+
 }

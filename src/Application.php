@@ -30,6 +30,13 @@ class PatientApp
 
     public function run()
     {
-        echo $this->router->route();
+        $json = $this->router->route();
+        $this->setHeaders();
+        echo $json;
+    }
+
+    private function setHeaders()
+    {
+        header("Content-Type: application/json; charset=UTF-8");
     }
 }
