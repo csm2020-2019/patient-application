@@ -13,7 +13,7 @@ class Database
     private function __construct() {}
     private function __clone() {}
 
-    public static function getDatabase()
+    public static function getDatabase(): PDO
     {
         if (!isset(self::$db)) {
             $config = Config::getConfig();

@@ -25,7 +25,7 @@ class Config
     private function __clone(){}
 
     // TODO: Better error handling in this entire method
-    public static function getConfig()
+    public static function getConfig(): Array
     {
         if (!isset(self::$config)) {
             $configArray = [];

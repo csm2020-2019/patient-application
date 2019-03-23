@@ -22,7 +22,7 @@ class PatientApp
         $this->auth = new Authentication();
     }
 
-    public static function init()
+    public static function init(): PatientApp
     {
         if (!isset(self::$instance)) {
             self::$instance = new PatientApp();

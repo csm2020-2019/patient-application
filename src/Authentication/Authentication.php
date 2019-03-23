@@ -27,7 +27,7 @@ class Authentication
     }
     private function __clone() {}
 
-    public function login()
+    public function login(): String
     {
         if (!isset($_POST['username']) || !isset($_POST['password'])) {
             return json_encode(self::UNAUTHORISED_JSON);
@@ -36,7 +36,7 @@ class Authentication
     }
 
     // http://phpclicks.com/php-token-based-authentication/
-    private function authenticate($username, $password)
+    private function authenticate(String $username, String $password): String
     {
         //$username = 'test';
         //$password = 'test';
@@ -81,17 +81,22 @@ class Authentication
             $jsonArray = ['status' => 'success', 'resp' => ['jwt' => $jwt]];
             return json_encode($jsonArray);
         }
-        return json_encode(self::UNAUTHORISED_JSON);
+        return $this->unauthorised();
     }
 
-    public function tokenAuthenticate($token)
+    public function tokenAuthenticate(Array $token): String
     {
         try {
             $secretKey = base64_decode($this->secretKey);
             $decodedData = JWT::decode($token, $secretKey, [$this->algorithm]);
             return json_encode(['status' => 'success', 'data' => $decodedData]);
         } catch (Exception $e) {
-            return json_encode(self::UNAUTHORISED_JSON);
+            return$this->unauthorised();
         }
+    }
+
+    private function unauthorised(): String
+    {
+        return json_encode(self::UNAUTHORISED_JSON);
     }
 }
