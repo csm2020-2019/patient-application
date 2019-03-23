@@ -3,7 +3,7 @@ namespace csm2020\PatientApp;
 
 use csm2020\PatientApp\Config\Config;
 use csm2020\PatientApp\Database\Database;
-use csm2020\PatientApp\Authentication\Authentication;
+use csm2020\PatientApp\Router\Router;
 
 class PatientApp
 {
@@ -12,14 +12,12 @@ class PatientApp
     private $config;
     private $database;
     private $router;
-    private $auth;
 
     private function __construct()
     {
         $this->config = Config::getConfig();
         $this->database = Database::getDatabase();
-        //$this->router = new Router();
-        $this->auth = new Authentication();
+        $this->router = new Router();
     }
 
     public static function init(): PatientApp
@@ -32,9 +30,6 @@ class PatientApp
 
     public function run()
     {
-        header("Content-Type: application/json; charset=UTF-8");
-        echo $this->auth->login();
-        //$this->router->route();
-        //var_dump(self::$instance);
+        echo $this->router->route();
     }
 }

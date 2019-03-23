@@ -27,16 +27,16 @@ class Authentication
     }
     private function __clone() {}
 
-    public function login(): String
+    public function login()
     {
         if (!isset($_POST['username']) || !isset($_POST['password'])) {
-            return json_encode(self::UNAUTHORISED_JSON);
+            return null;
         }
         return $this->authenticate($_POST['username'], $_POST['password']);
     }
 
     // http://phpclicks.com/php-token-based-authentication/
-    private function authenticate(String $username, String $password): String
+    private function authenticate(String $username, String $password): array
     {
         //$username = 'test';
         //$password = 'test';
@@ -78,25 +78,20 @@ class Authentication
                 $this->algorithm
             );
 
-            $jsonArray = ['status' => 'success', 'resp' => ['jwt' => $jwt]];
-            return json_encode($jsonArray);
+            $jsonArray = ['status' => 'success', 'response' => ['jwt' => $jwt]];
+            return $jsonArray;
         }
-        return $this->unauthorised();
+        return null;
     }
 
-    public function tokenAuthenticate(Array $token): String
+    public function tokenAuthenticate(String $token): array
     {
         try {
             $secretKey = base64_decode($this->secretKey);
             $decodedData = JWT::decode($token, $secretKey, [$this->algorithm]);
-            return json_encode(['status' => 'success', 'data' => $decodedData]);
+            return ['status' => 'success', 'data' => $decodedData];
         } catch (Exception $e) {
-            return$this->unauthorised();
+            return null;
         }
-    }
-
-    private function unauthorised(): String
-    {
-        return json_encode(self::UNAUTHORISED_JSON);
     }
 }
