@@ -3,9 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <title>Token Test</title>
+  <script
+    src="http://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
 </head>
 <body>
-<form action="api.php" method="POST">
+
+<form name="login" id="login" method="POST">
   <fieldset>
     <input type="hidden" name="token" id="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE1NTMzNDY5NzgsImp0aSI6ImZ5cUtSazNoZ3RvSXZ1NFNlWFVcLzJFbEZCWGpyRFU0ZEo2RUc3d1ExdXFRPSIsImlzcyI6Imh0dHA6XC9cL3VzZXJzLmFiZXIuYWMudWtcL29sZTRcLyIsIm5iZiI6MTU1MzM0Njk4OCwiZXhwIjoxNTUzMzU0MTg4LCJkYXRhIjp7ImlkIjoiMiIsIm5hbWUiOiJ3aWJibGUifX0.f0_9TbFRvTTjQzF3V6kxhuIWr6kI_VyvVIP7i-KFQuvqdYB7jGUZK81K7_AgHwvzmOsUu7TsmETDSKia5IuRGQ">
   </fieldset>
@@ -14,6 +19,28 @@
     <input type="text" name="request" id="request" required>
   </fieldset>
   <input type="submit" name="button" id="button" value="Submit">
+  <p id="results">
+
+  </p>
 </form>
+<script>
+  let form = $('#login');
+  form.submit(function (e) {
+    e.preventDefault();
+
+    let form = $(this);
+    let url = 'api.php';
+
+    $.ajax({
+      type: "POST",
+      url: url,
+      data: form.serialize(),
+      success: function(data)
+      {
+        alert(JSON.stringify(data));
+      }
+    });
+  })
+</script>
 </body>
 </html>
