@@ -24,7 +24,7 @@ class Router
         if (!isset($_POST['token'])) {
             $loginCheck = $this->auth->login();
             if (!$loginCheck) {
-                return $this->returnError(self::UNAUTHORISED);
+                return $this->error(self::UNAUTHORISED);
             }
             return $this->success($loginCheck, 200);
         }
@@ -81,7 +81,6 @@ class Router
                 break;
             case 200:
             default:
-                $responseCode = 200;
                 break;
         }
         http_response_code($responseCode);
