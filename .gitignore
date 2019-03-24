@@ -5,8 +5,6 @@
 
 ### Application-specific
 settings.ini
-public_html/scripts
-public_html/styles
 
 ### Composer ###
 # composer.phar
