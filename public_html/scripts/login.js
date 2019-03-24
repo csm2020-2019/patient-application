@@ -1,5 +1,10 @@
 "use strict";
 window.onload = function () {
+  if (document.cookie) {
+    if (Date.now() > new Date(document.cookie.indexOf('expires='))) {
+      window.location.href = 'app.html';
+    }
+  }
   document.getElementById('scripts-enabled').style.cssText = 'display:block';
 };
 (function ($) {

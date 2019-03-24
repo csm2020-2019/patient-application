@@ -32,7 +32,8 @@
 
     // Main route
     this.get('#/', function (context) {
-      context.render('templates/home.mustache');
+      context.render('templates/home.template')
+        .appendTo(context.$element());
     });
 
     this.get('#/programme', function (context) {
