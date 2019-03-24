@@ -1,9 +1,7 @@
 "use strict";
 window.onload = function () {
-  if (document.cookie) {
-    if (Date.now() > new Date(document.cookie.indexOf('expires='))) {
-      window.location.href = 'app.html';
-    }
+  if (Cookies.get('token')) {
+    window.location.href = 'app.html';
   }
   document.getElementById('scripts-enabled').style.cssText = 'display:block';
 };
@@ -33,9 +31,11 @@ window.onload = function () {
         let jwt = response['response']['jwt'];
 
         // I really don't want to have to hard-code this in, but I can't figure out any other way
-        let exp = new Date(new Date().getTime() + TIMEOUT * 60 * 1000).toUTCString();
+        let exp = new Date(new Date().getTime() + TIMEOUT * 60 * 1000);
 
-        document.cookie = `token=${jwt};expires=${exp}`;
+        //document.cookie = `token=${jwt};expires=${exp}`;
+        Cookies.set('token', jwt, {expires: exp});
+        Cookies.set('expiry', exp, {expires: exp});
         console.log(`Authentication successful!`);
         window.location.href = 'app.html';
       },
