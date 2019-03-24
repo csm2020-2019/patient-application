@@ -14,6 +14,12 @@ window.onload = function () {
    */
   $('#login').submit(function (e) {
     e.preventDefault();
+
+    // Writing this in vanilla for now because I've had trouble with the jQuery
+    if (document.contains(document.getElementById('error'))) {
+      document.getElementById('error').remove();
+    }
+
     let form = $(this);
     let url = 'api.php';
 
@@ -29,17 +35,20 @@ window.onload = function () {
         // I really don't want to have to hard-code this in, but I can't figure out any other way
         let exp = new Date(new Date().getTime() + TIMEOUT * 60 * 1000).toUTCString();
 
-        document.cookie = `token=${jwt}`;
-        document.cookie = `expires=${exp}`;
+        document.cookie = `token=${jwt};expires=${exp}`;
         console.log(`Authentication successful!`);
         window.location.href = 'app.html';
       },
       error: function(data)
       {
-        // TODO: Better handling of error
-        alert('Error: ' + jQuery.parseJSON(JSON.stringify(data)));
+        authError(data.responseJSON.message.toString());
       }
     });
+    const authError = function(error) {
+      let loginForm = $('#login-form');
+      let danger = `<div id="error" class="alert alert-danger" role="alert"><strong>Error: </strong>${error}</div>`;
+      loginForm.prepend(danger);
+    };
   });
 })(jQuery);
 
