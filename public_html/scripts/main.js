@@ -39,6 +39,11 @@
     this.get('#/programme', function (context) {
       // Retrieve programme information
 
+    });
+
+    this.get('#/logout', function (context) {
+      document.cookie = "token=;expires= Thu, 01 Jan 1970 00:00:00 GMT";
+      this.redirect('#/');
     })
 
   });
