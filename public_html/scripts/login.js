@@ -9,7 +9,6 @@ window.onload = function () {
    */
   $('#login').submit(function (e) {
     e.preventDefault();
-    alert('Triggered');
     let form = $(this);
     let url = 'api.php';
 
@@ -27,7 +26,8 @@ window.onload = function () {
 
         document.cookie = `token=${jwt}`;
         document.cookie = `expires=${exp}`;
-        console.log(`Success! Cookie registered: ${document.cookie}`)
+        console.log(`Authentication successful!`);
+        window.location.href = 'app.html';
       },
       error: function(data)
       {
