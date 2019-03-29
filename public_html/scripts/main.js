@@ -21,12 +21,13 @@
     };
 
     this.before('#/', function () {
-      if (document.contains(document.getElementById('success'))) {
-        document.getElementById('success').remove();
-      }
-      if (document.contains(document.getElementById('error'))) {
-        document.getElementById('error').remove();
-      }
+      // if (document.contains(document.getElementById('success'))) {
+      //   document.getElementById('success').remove();
+      // }
+      // if (document.contains(document.getElementById('error'))) {
+      //   document.getElementById('error').remove();
+      // }
+      $('#errors').empty();
     });
 
     this.before('#/', function() {
