@@ -33,20 +33,32 @@
 </p>
 <form id="address-change" name="address-change" method="POST">
     <div class="form-group">
-        <label for="address-1">Address #1</label>
-        <input type="text" id="address-1" name="address-1" class="form-control" placeholder="i.e. 12 Health Street" required>
+        <label for="address-1">Address #1:</label>
+        <input type="text" id="address-1" name="address-1" class="form-control"
+               placeholder="i.e. 12 Health Street" required>
     </div>
     <div class="form-group">
-        <label for="address-2">Address #2</label>
+        <label for="address-2">Address #2:</label>
         <input type="text" id="address-2" name="address-2" class="form-control" placeholder="i.e. Penglais">
     </div>
     <div class="form-group">
-        <label for="town">Town / City</label>
+        <label for="town">Town / City:</label>
         <input type="text" id="town" name="town" class="form-control" placeholder="i.e. Manchester" required>
     </div>
     <div class="form-group">
-        <label for="postcode">Postcode</label>
+        <label for="postcode">Postcode:</label>
         <input type="text" id="postcode" name="town" class="form-control" placeholder="i.e. SY23 3FL" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit Changes</button>
+</form>
+<hr>
+<h2>Change Email Address</h2>
+<p>If you've changed your email address, you can change the contact email here.</p>
+<form id="email" name="email" method="POST" action="#/patient/email">
+    <div class="form-group">
+        <label for="email-address">Email address:</label>
+        <input type="email" id="email-address" name="email-address" class="form-control"
+               value="<%= patient.editable.email %>" placeholder="i.e. name@domain.com" required>
     </div>
     <button type="submit" class="btn btn-primary">Submit Changes</button>
 </form>

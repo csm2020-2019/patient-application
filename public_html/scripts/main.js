@@ -15,6 +15,9 @@
     };
 
     const printSuccess = function (success) {
+      if (!success) {
+        success = 'Changes saved successfully!';
+      }
       let fSuccess = success.toString();
       $('#errors').append(`<div id="success" class="success alert-success" role="success"><strong>Success: </strong>${fSuccess}</div>`);
       window.scrollTo(0,0);
@@ -75,10 +78,28 @@
             .appendTo(context.$element());
         },
         error: function (data) {
-          //context.log(data);
           printError(jQuery.parseJSON(JSON.stringify(data)));
         }
-      })
+      });
+    });
+
+    this.post('#/patient/email', function (context) {
+      $.ajax({
+        type: "POST",
+        url: API,
+        data: {
+          token: Cookies.get('token'),
+          request: 'patient-email',
+          email: $('email-address').val()
+        },
+        success: function (data) {
+          context.log(data);
+          printSuccess();
+        },
+        error: function (data) {
+          printError(jQuery.parseJSON(JSON.stringify(data)))
+        }
+      });
     });
 
     this.post('#/patient/subscription', function (context) {
@@ -92,7 +113,7 @@
         },
         success: function (data) {
           context.log(data);
-          printSuccess('Changes successfully saved!');
+          printSuccess();
         },
         error: function (data) {
           printError(jQuery.parseJSON(JSON.stringify(data)))
