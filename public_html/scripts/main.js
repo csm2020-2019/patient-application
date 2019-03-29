@@ -83,6 +83,28 @@
       });
     });
 
+    this.post('#/patient/address', function (context) {
+      $.ajax({
+        type: "POST",
+        url: API,
+        data: {
+          token: Cookies.get('token'),
+          request: 'patient-address',
+          address1: $('#address-1').val(),
+          address2: $('#address-2').val(),
+          town: $('#town').val(),
+          postcode: $('#postcode').val()
+        },
+        success: function (data) {
+          context.log(data);
+          printSuccess();
+        },
+        error: function (data) {
+          printError(jQuery.parseJSON(JSON.stringify(data)));
+        }
+      });
+    });
+
     this.post('#/patient/email', function (context) {
       $.ajax({
         type: "POST",
@@ -90,7 +112,7 @@
         data: {
           token: Cookies.get('token'),
           request: 'patient-email',
-          email: $('email-address').val()
+          email: $('#email-address').val()
         },
         success: function (data) {
           context.log(data);

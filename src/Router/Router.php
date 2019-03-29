@@ -68,12 +68,21 @@ class Router
                 //$this->responseData['patient'] = $controller->get($this->userId);
                 break;
             case 'patient-address':
+                $controller = new PatientController();
+                if (!$controller->address($_POST['address1'],
+                    $_POST['address2'],
+                    $_POST['town'],
+                    $_POST['postcode'],
+                    $this->userId)) {
+                    return $this->error(self::SUBMISSION_FAILURE, $tokenData);
+                }
                 break;
             case 'patient-email':
                 $controller = new PatientController();
                 if (!$controller->email($_POST['email'], $this->userId)) {
                     return $this->error(self::BAD_EMAIL, $tokenData);
                 }
+                break;
             case 'patient-subscription':
                 $controller = new PatientController();
                 if (!$controller->emailSubscription($_POST['subscription'], $this->userId)) {

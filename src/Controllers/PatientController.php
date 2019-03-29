@@ -45,9 +45,44 @@ class PatientController
 
     public function post(array $ingredients) {}
 
+    public function address($address1, $address2, $town, $postcode, $uid)
+    {
+        if (!$address1 || !$town || !$postcode || !$uid) {
+            return null;
+        }
+        // Cleanse tags of any funny business
+        $address1 =     trim(stripslashes(htmlspecialchars(strip_tags($address1))));
+        if ($address2) {
+            $address2 = trim(stripslashes(htmlspecialchars(strip_tags($address2))));
+            $address2 = "{$address2},";
+        } else {
+            $address2 = '';
+        }
+        $town =         trim(stripslashes(htmlspecialchars(strip_tags($town))));
+        $postcode =     trim(stripslashes(htmlspecialchars(strip_tags($postcode))));
+
+        // One last check on the postcode
+        // https://stackoverflow.com/questions/14935013/preg-match-regex-required-for-specific-uk-postcode-area-code
+        $accepted_numbers = array_merge(range(15, 22), range(31, 41));
+        if (!preg_match('#^(GIR ?0AA|[A-PR-UWYZ]([0-9]{1,2}|([A-HK-Y][0-9]([0-9ABEHMNPRV-Y])?)|[0-9][A-HJKPS-UW]) ?[0-9][ABD-HJLNP-UW-Z]{2})$#', $postcode) && !substr($postcode, 0, 2) == 'DN' && !in_array(substr($postcode, 2, 2), $accepted_numbers)) {
+            return null;
+        }
+        $address = "${address1}, ${address2} ${town}, ${postcode}";
+        try {
+            $stmt = $this->db->prepare(
+                'UPDATE patient_records SET patient_address = :address WHERE userId = :uid');
+            $stmt->bindParam(':address', $address);
+            $stmt->bindParam(':uid', $uid);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            return null;
+        }
+        return true;
+    }
+
     public function email($email, $uid)
     {
-        if (!email || !$uid) {
+        if (!$email || !$uid) {
             return null;
         }
 

@@ -31,7 +31,9 @@
     If you've moved house or otherwise had a change of residency, please amend your details here. If you inform your GP
     of any changes, this will also be reflected here. If you've moved outside of the UK, you need to let your GP know.
 </p>
-<form id="address-change" name="address-change" method="POST">
+<p>The current address on record for you is: </p>
+<address><%= patient.editable.address %></address>
+<form id="address-change" name="address-change" method="POST" action="#/patient/address">
     <div class="form-group">
         <label for="address-1">Address #1:</label>
         <input type="text" id="address-1" name="address-1" class="form-control"
