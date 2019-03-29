@@ -56,7 +56,7 @@
     When you were added to the system, you were optionally prescribed a subscription to emails with guidance and
     support for living with diabetes. You can opt in our out of that programme here.
 </p>
-<form id="email-subscription" name="email-subscription" method="POST">
+<form id="email-subscription" name="email-subscription" method="POST" action="#/patient/subscription">
     <div class="form-group">
         <label for="checkbox">Opt-in?</label>
         <!-- Not ideal. But turns out, but just casting a Boolean in the value attr for checkboxes isn't enough -->

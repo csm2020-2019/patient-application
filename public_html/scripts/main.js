@@ -13,7 +13,15 @@
       $('#errors').append(`<div id="error" class="alert alert-danger" role="alert"><strong>Error: </strong>${fError}</div>`);
     };
 
+    const printSuccess = function (success) {
+      let fSuccess = success.toString();
+      $('#errors').append(`<div id="success" class="success alert-success" role="success"><strong>Success: </strong>${fSuccess}</div>`);
+    };
+
     this.before('#/', function () {
+      if (document.contains(document.getElementById('success'))) {
+        document.getElementById('success').remove();
+      }
       if (document.contains(document.getElementById('error'))) {
         document.getElementById('error').remove();
       }
@@ -43,6 +51,7 @@
     // Routes!
 
     this.get('#/', function (context) {
+      context.app.swap('');
       context.render('templates/home.template')
         .appendTo(context.$element());
     });
@@ -62,8 +71,27 @@
             .appendTo(context.$element());
         },
         error: function (data) {
-          context.log(data);
+          //context.log(data);
           printError(jQuery.parseJSON(JSON.stringify(data)));
+        }
+      })
+    });
+
+    this.post('#/patient/subscription', function (context) {
+      $.ajax({
+        type: "POST",
+        url: API,
+        data: {
+          token: Cookies.get('token'),
+          request: 'patient-subscription',
+          subscription: $('#checkbox').is(":checked")
+        },
+        success: function (data) {
+          context.log(data);
+          printSuccess(jQuery.parseJSON(JSON.stringify(data)));
+        },
+        error: function (data) {
+          printError(jQuery.parseJSON(JSON.stringify(data)))
         }
       })
     });
