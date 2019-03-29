@@ -11,11 +11,13 @@
     const printError = function (error) {
       let fError = error.responseJSON.message.toString();
       $('#errors').append(`<div id="error" class="alert alert-danger" role="alert"><strong>Error: </strong>${fError}</div>`);
+      window.scrollTo(0,0);
     };
 
     const printSuccess = function (success) {
       let fSuccess = success.toString();
       $('#errors').append(`<div id="success" class="success alert-success" role="success"><strong>Success: </strong>${fSuccess}</div>`);
+      window.scrollTo(0,0);
     };
 
     this.before('#/', function () {
@@ -57,6 +59,7 @@
     });
 
     this.get('#/patient', function (context) {
+      context.app.swap('');
       $.ajax({
         type: "POST",
         url: API,
@@ -88,7 +91,7 @@
         },
         success: function (data) {
           context.log(data);
-          printSuccess(jQuery.parseJSON(JSON.stringify(data)));
+          printSuccess('Changes successfully saved!');
         },
         error: function (data) {
           printError(jQuery.parseJSON(JSON.stringify(data)))
