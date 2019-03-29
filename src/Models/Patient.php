@@ -12,6 +12,7 @@ class Patient
     private $userId;
     private $firstName;
     private $lastName;
+    private $email;
     private $dob;
     private $address;
     private $medicalHistory;
@@ -19,21 +20,22 @@ class Patient
     private $prescriptions;
     private $subscription;
 
-    private function __construct($firstName, $lastName, $dob, $address, $medicalHistory, $diagnosis, $prescriptions,
-                                $subscription, $patientId = null, $userId = null)
+    private function __construct($firstName, $lastName, $email, $dob, $address, $medicalHistory, $diagnosis,
+                                 $prescriptions, $subscription, $patientId = null, $userId = null)
     {
-        $this->firstName = $firstName;
-        $this->lastName = $lastName;
-        $this->dob = $dob;
-        $this->address = $address;
+        $this->firstName =      $firstName;
+        $this->lastName =       $lastName;
+        $this->email =          $email;
+        $this->dob =            $dob;
+        $this->address =        $address;
         $this->medicalHistory = $medicalHistory;
-        $this->diagnosis = $diagnosis;
-        $this->prescriptions = $prescriptions;
-        $this->subscription = $subscription;
+        $this->diagnosis =      $diagnosis;
+        $this->prescriptions =  $prescriptions;
+        $this->subscription =   $subscription;
 
         // Optional assignments, almost always will be null though
-        $this->patientId = $patientId;
-        $this->userId = $userId;
+        $this->patientId =      $patientId;
+        $this->userId =         $userId;
     }
     private function __clone() {}
 
@@ -42,6 +44,7 @@ class Patient
         $patient = new Patient(
             $ingredients['patient_first_name'],
             $ingredients['patient_last_name'],
+            $ingredients['patient_email'],
             $ingredients['patient_dob'],
             $ingredients['patient_address'],
             $ingredients['patient_medical_history'],
@@ -70,8 +73,25 @@ class Patient
     {
         return [
             'address'           => $this->getAddress(),
+            'email'             => $this->getEmail(),
             'subscription'      => $this->getSubscription()
         ];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param mixed $email
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
     }
 
     /**
