@@ -97,7 +97,7 @@
         error: function (data) {
           printError(jQuery.parseJSON(JSON.stringify(data)))
         }
-      })
+      });
     });
 
     this.get('#/details', function (context) {

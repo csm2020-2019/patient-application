@@ -51,7 +51,7 @@ class PatientController
             return null;
         }
 
-        if ($checkbox === 'checked' || $checkbox === true) {
+        if ($checkbox === 'true') {
             $checkbox = 1;
         } else {
             $checkbox = 0;
