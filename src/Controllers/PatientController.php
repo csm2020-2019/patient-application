@@ -45,6 +45,28 @@ class PatientController
 
     public function post(array $ingredients) {}
 
+    public function email($email, $uid)
+    {
+        if (!email || !$uid) {
+            return null;
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return null;
+        }
+
+        try {
+            $stmt = $this->db->prepare(
+                'UPDATE patient_records SET patient_email = :email WHERE userId = :uid');
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':uid', $uid);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            return null;
+        }
+        return true;
+    }
+
     public function emailSubscription($checkbox, $uid)
     {
         if (!$checkbox || !$uid) {

@@ -7,10 +7,11 @@ use csm2020\PatientApp\Controllers\PatientController;
 
 class Router
 {
-    const UNAUTHORISED =            'Unauthorised';
+    const BAD_EMAIL =               'Invalid email submitted';
     const NO_COMMAND =              'No command specified';
-    const UNRECOGNISED_COMMAND =    'Unrecognised command specified';
     const SUBMISSION_FAILURE =      'Data submission unsuccessful';
+    const UNAUTHORISED =            'Unauthorised';
+    const UNRECOGNISED_COMMAND =    'Unrecognised command specified';
 
     private $auth;
     private $responseData = [];
@@ -68,6 +69,11 @@ class Router
                 break;
             case 'patient-address':
                 break;
+            case 'patient-email':
+                $controller = new PatientController();
+                if (!$controller->email($_POST['email'], $this->userId)) {
+                    return $this->error(self::BAD_EMAIL, $tokenData);
+                }
             case 'patient-subscription':
                 $controller = new PatientController();
                 if (!$controller->emailSubscription($_POST['subscription'], $this->userId)) {
@@ -100,9 +106,10 @@ class Router
     {
         $responseCode = 200; // OK is default
         switch ($code) {
+            case self::BAD_EMAIL:
+            case self::NO_COMMAND:
             case self::SUBMISSION_FAILURE:
             case self::UNRECOGNISED_COMMAND:
-            case self::NO_COMMAND:
                 $responseCode = 400;
                 break;
             case self::UNAUTHORISED:
