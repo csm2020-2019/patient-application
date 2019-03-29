@@ -19,7 +19,7 @@ class Patient
     private $prescriptions;
     private $subscription;
 
-    public function __construct($firstName, $lastName, $dob, $address, $medicalHistory, $diagnosis, $prescriptions,
+    private function __construct($firstName, $lastName, $dob, $address, $medicalHistory, $diagnosis, $prescriptions,
                                 $subscription, $patientId = null, $userId = null)
     {
         $this->firstName = $firstName;
@@ -35,32 +35,202 @@ class Patient
         $this->patientId = $patientId;
         $this->userId = $userId;
     }
+    private function __clone() {}
 
-    private function patientFactory(array $ingredients): Patient
+    public static function factory(array $ingredients)
     {
-     return null; // TODO: Does this need to go here?
+        $patient = new Patient(
+            $ingredients['patient_first_name'],
+            $ingredients['patient_last_name'],
+            $ingredients['patient_dob'],
+            $ingredients['patient_address'],
+            $ingredients['patient_medical_history'],
+            $ingredients['patient_diagnosis'],
+            $ingredients['patient_prescriptions'],
+            $ingredients['patient_email_prescription'],
+            $ingredients['patient_id'],
+            $ingredients['userId']
+        );
+        return $patient;
     }
 
-    public function getByPatientId($patientId): Patient
+    public function displayable()
     {
-        $db = Database::getDatabase();
-        try {
-            $stmt = $db->prepare('SELECT * FROM patient_records WHERE patient_id = :pid LIMIT 1');
-            $stmt->bindParam(':pid', $patientId);
-            $stmt->execute();
-
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            if (!$result) {
-                return null;
-            }
-            return $this->patientFactory($result);
-        } catch (PDOException $e) {
-            return null;
-        }
+        return [
+            'firstName'         => $this->getFirstName(),
+            'lastName'          => $this->getLastName(),
+            'dob'               => $this->getDob(),
+            'medicalHistory'    => $this->getMedicalHistory(),
+            'diagnosis'         => $this->getDiagnosis(),
+            'prescription'      => $this->getPrescriptions(),
+        ];
     }
 
-    public function getByUserId($userId)
+    public function editable()
     {
+        return [
+            'address'           => $this->getAddress(),
+            'subscription'      => $this->getSubscription()
+        ];
+    }
 
+    /**
+     * @return null
+     */
+    public function getPatientId()
+    {
+        return $this->patientId;
+    }
+
+    /**
+     * @param null $patientId
+     */
+    public function setPatientId($patientId)
+    {
+        $this->patientId = $patientId;
+    }
+
+    /**
+     * @return null
+     */
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
+    /**
+     * @param null $userId
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @param mixed $firstName
+     */
+    public function setFirstName($firstName)
+    {
+        $this->firstName = $firstName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * @param mixed $lastName
+     */
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDob()
+    {
+        return $this->dob;
+    }
+
+    /**
+     * @param mixed $dob
+     */
+    public function setDob($dob)
+    {
+        $this->dob = $dob;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param mixed $address
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMedicalHistory()
+    {
+        return $this->medicalHistory;
+    }
+
+    /**
+     * @param mixed $medicalHistory
+     */
+    public function setMedicalHistory($medicalHistory)
+    {
+        $this->medicalHistory = $medicalHistory;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDiagnosis()
+    {
+        return $this->diagnosis;
+    }
+
+    /**
+     * @param mixed $diagnosis
+     */
+    public function setDiagnosis($diagnosis)
+    {
+        $this->diagnosis = $diagnosis;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPrescriptions()
+    {
+        return $this->prescriptions;
+    }
+
+    /**
+     * @param mixed $prescriptions
+     */
+    public function setPrescriptions($prescriptions)
+    {
+        $this->prescriptions = $prescriptions;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSubscription()
+    {
+        return $this->subscription;
+    }
+
+    /**
+     * @param mixed $subscription
+     */
+    public function setSubscription($subscription)
+    {
+        $this->subscription = $subscription;
     }
 }

@@ -2,6 +2,8 @@
 namespace csm2020\PatientApp\Router;
 
 use csm2020\PatientApp\Authentication\Authentication;
+use csm2020\PatientApp\Controllers\PatientController;
+use csm2020\PatientApp\Models\Patient;
 
 class Router
 {
@@ -18,8 +20,13 @@ class Router
         $this->json = [];
     }
 
-    public function route(): String
+    public function route()
     {
+        // TODO: Please comment me out when you're done! Or affix me to a debug switch!
+        if (!isset($_POST['token']) && isset($_GET['token'])) {
+            $_POST = $_GET;
+        }
+
         // Check if there's no token, if so, we need to do initial authentication
         if (!isset($_POST['token'])) {
             $loginCheck = $this->auth->login();
@@ -46,6 +53,21 @@ class Router
             case 'all':
                 // Return everything;
                 break;
+            case 'patient':
+                $controller = new PatientController();
+                if (!$this->auth->getId($_POST['token'])) {
+                    return $this->error(self::UNAUTHORISED, $tokenCheck);
+                    break;
+                }
+                $token = $this->auth->getId(($_POST['token']));
+
+                if (!$this->json['patient'] = $controller->get($token)) {
+                    return $this->error(self::UNAUTHORISED, $tokenCheck);
+                    break;
+                }
+                $this->json['patient'] = $controller->get($token);
+                break;
+            case 'patient-modify':
             case 'programmes':
                 // Spin up the controller and do stuff
                 break;

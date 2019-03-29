@@ -94,4 +94,16 @@ class Authentication
             return null;
         }
     }
+
+    public function getId(String $token)
+    {
+        try {
+            $secretKey = base64_decode($this->secretKey);
+            $decodedData = JWT::decode($token, $secretKey, [$this->algorithm]);
+
+            return $decodedData->data->id;
+            } catch (Exception $e) {
+            return null;
+        }
+    }
 }
