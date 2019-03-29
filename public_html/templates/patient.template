@@ -1,0 +1,70 @@
+<h1 class="h2">Your Details</h1>
+<p>
+    Your identity records and medical history displayed below cannot be modified. If you see an error and
+    wish to make an amendment, please contact your GP at your earliest convenience.
+</p>
+<table class="table table-responsive table-striped">
+    <thead>
+    <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Date of Birth</th>
+        <th>Medical History</th>
+        <th>Diagnosis</th>
+        <th>Prescription</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><%= patient.displayable.firstName %></td>
+        <td><%= patient.displayable.lastName %></td>
+        <td><%= new Date(patient.displayable.dob).toDateString() %></td>
+        <td><%= patient.displayable.medicalHistory %></td>
+        <td><%= patient.displayable.diagnosis %></td>
+        <td><%= patient.displayable.prescription %></td>
+    </tr>
+    </tbody>
+</table>
+<hr>
+<h2>Change of Address</h2>
+<p>
+    If you've moved house or otherwise had a change of residency, please amend your details here. If you inform your GP
+    of any changes, this will also be reflected here. If you've moved outside of the UK, you need to let your GP know.
+</p>
+<form id="address-change" name="address-change" method="POST">
+    <div class="form-group">
+        <label for="address-1">Address #1</label>
+        <input type="text" id="address-1" name="address-1" class="form-control" placeholder="i.e. 12 Health Street" required>
+    </div>
+    <div class="form-group">
+        <label for="address-2">Address #2</label>
+        <input type="text" id="address-2" name="address-2" class="form-control" placeholder="i.e. Penglais">
+    </div>
+    <div class="form-group">
+        <label for="town">Town / City</label>
+        <input type="text" id="town" name="town" class="form-control" placeholder="i.e. Manchester" required>
+    </div>
+    <div class="form-group">
+        <label for="postcode">Postcode</label>
+        <input type="text" id="postcode" name="town" class="form-control" placeholder="i.e. SY23 3FL" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit Changes</button>
+</form>
+<hr>
+<h2>Email Subscription</h2>
+<p>
+    When you were added to the system, you were optionally prescribed a subscription to emails with guidance and
+    support for living with diabetes. You can opt in our out of that programme here.
+</p>
+<form id="email-subscription" name="email-subscription" method="POST">
+    <div class="form-group">
+        <label for="checkbox">Opt-in?</label>
+        <!-- Not ideal. But turns out, but just casting a Boolean in the value attr for checkboxes isn't enough -->
+        <% if (Boolean(patient.editable.subscription)) { %>
+        <input type="checkbox" id="checkbox" name="checkbox" checked>
+        <% } else { %>
+        <input type="checkbox" id="checkbox" name="checkbox">
+        <% } %>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit Changes</button>
+</form>

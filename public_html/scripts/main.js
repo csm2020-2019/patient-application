@@ -26,6 +26,7 @@
           // Not logged in
           alert('You have to be logged in to do that.');
           window.location.href = 'index.html';
+          return;
         }
         // Logged in
         init =      true;
@@ -46,17 +47,19 @@
         .appendTo(context.$element());
     });
 
-    this.get('#/programmes', function (context) {
+    this.get('#/patient', function (context) {
       $.ajax({
         type: "POST",
         url: API,
         data: {
-          token: token,
-          request: 'programmes'
+          token: Cookies.get('token'),
+          request: 'patient'
         },
         success: function (data) {
-          alert('Great success!');
-          console.log(data);
+          let formattedData = jQuery.parseJSON(JSON.stringify(data));
+          //context.log(formattedData);
+          context.render('templates/patient.template', {patient: formattedData.patient})
+            .appendTo(context.$element());
         },
         error: function (data) {
           context.log(data);
@@ -75,6 +78,7 @@
     this.get('#/logout', function (context) {
       //document.cookie = "token=;expires= Thu, 01 Jan 1970 00:00:00 GMT";
       Cookies.remove('token');
+      Cookies.remove('expiry');
       this.redirect('#/');
     })
 
