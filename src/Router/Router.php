@@ -3,21 +3,24 @@ namespace csm2020\PatientApp\Router;
 
 use csm2020\PatientApp\Authentication\Authentication;
 use csm2020\PatientApp\Controllers\PatientController;
-use csm2020\PatientApp\Models\Patient;
+//use csm2020\PatientApp\Models\Patient;
 
 class Router
 {
-    const UNAUTHORISED = 'Unauthorised';
-    const NO_COMMAND = 'Authenticated, but no command specified';
-    const UNRECOGNISED_COMMAND = 'Authenticated, but unrecognised command specified';
+    const UNAUTHORISED =            'Unauthorised';
+    const NO_COMMAND =              'No command specified';
+    const UNRECOGNISED_COMMAND =    'Unrecognised command specified';
+    const SUBMISSION_FAILURE =      'Data submission unsuccessful';
 
     private $auth;
-    private $json = [];
+    private $responseData = [];
+    private $userId;
 
     public function __construct()
     {
         $this->auth = new Authentication();
-        $this->json = [];
+        $this->responseData = [];
+        $this->userId = null;
     }
 
     public function route()
@@ -37,15 +40,17 @@ class Router
         }
 
         // Time to check token and do the rest of the routing
-        $tokenCheck = $this->auth->tokenAuthenticate($_POST['token']);
-        if (!isset($tokenCheck)) {
+        $tokenData = $this->auth->tokenAuthenticate($_POST['token']);
+        if (!isset($tokenData)) {
             return $this->error(self::UNAUTHORISED);
         }
-        $this->json = $tokenCheck;
+        $this->userId           = $this->auth->getId($_POST['token']);
+        $this->responseData     = $tokenData;
+
 
         // Did they send a request?
         if (!isset($_POST['request'])) {
-            return $this->error(self::NO_COMMAND, $tokenCheck);
+            return $this->error(self::NO_COMMAND, $tokenData);
         }
 
         // In a modern PHP framework, this would be like a list of routes. Yeah.
@@ -55,28 +60,29 @@ class Router
                 break;
             case 'patient':
                 $controller = new PatientController();
-                if (!$this->auth->getId($_POST['token'])) {
-                    return $this->error(self::UNAUTHORISED, $tokenCheck);
+                if (!$this->responseData['patient'] = $controller->get($this->userId)) {
+                    return $this->error(self::UNAUTHORISED, $tokenData);
                     break;
                 }
-                $token = $this->auth->getId(($_POST['token']));
-
-                if (!$this->json['patient'] = $controller->get($token)) {
-                    return $this->error(self::UNAUTHORISED, $tokenCheck);
-                    break;
-                }
-                $this->json['patient'] = $controller->get($token);
+                //$this->responseData['patient'] = $controller->get($this->userId);
                 break;
-            case 'patient-modify':
+            case 'patient-address':
+                break;
+            case 'patient-subscription':
+                $controller = new PatientController();
+                if (!$controller->emailSubscription($_POST['subscription'], $this->userId)) {
+                    return $this->error(self::SUBMISSION_FAILURE, $tokenData);
+                }
+                break;
             case 'programmes':
                 // Spin up the controller and do stuff
                 break;
             default:
-                return $this->error(self::UNRECOGNISED_COMMAND, $tokenCheck);
+                return $this->error(self::UNRECOGNISED_COMMAND, $tokenData);
                 break;
         }
         $this->setResponseCode(200);
-        return $this->success($this->json, 200);
+        return $this->success($this->responseData, 200);
     }
 
     private function success(array $data, int $code = 200)
@@ -94,6 +100,7 @@ class Router
     {
         $responseCode = 200; // OK is default
         switch ($code) {
+            case self::SUBMISSION_FAILURE:
             case self::UNRECOGNISED_COMMAND:
             case self::NO_COMMAND:
                 $responseCode = 400;

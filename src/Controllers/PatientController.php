@@ -5,24 +5,25 @@ use csm2020\PatientApp\Database\Database;
 use csm2020\PatientApp\Models\Patient;
 
 use PDO;
-use Exception;
+use PDOException;
 
 class PatientController
 {
+    private $db;
+
     public function __construct()
     {
-
+        $this->db = Database::getDatabase();
     }
 
     public function get($id)
     {
         $patientData = [];
-        $db = Database::getDatabase();
         if (!$id) {
             return null;
         }
         try {
-            $stmt = $db->prepare('SELECT * FROM patient_records WHERE userId = :uid LIMIT 1');
+            $stmt = $this->db->prepare('SELECT * FROM patient_records WHERE userId = :uid LIMIT 1');
             $stmt->bindParam(':uid', $id);
             $stmt->execute();
 
@@ -37,14 +38,35 @@ class PatientController
             $patientData['editable'] =      $patient->editable();
 
             return $patientData;
-        } catch (Exception $e) {
-            return 'interesting error goes here';
+        } catch (PDOException $e) {
+            return null;
         }
     }
 
-    public function post(array $ingredients): bool
-    {
+    public function post(array $ingredients) {}
 
+    public function emailSubscription($checkbox, $uid)
+    {
+        if (!$checkbox || !$uid) {
+            return null;
+        }
+
+        if ($checkbox === 'checked' || $checkbox === true) {
+            $checkbox = 1;
+        } else {
+            $checkbox = 0;
+        }
+
+        try {
+            $stmt = $this->db->prepare(
+                'UPDATE patient_records SET patient_email_prescription = :sub WHERE userId = :uid');
+            $stmt->bindParam(':sub', $checkbox);
+            $stmt->bindParam(':uid', $uid);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            return null;
+        }
+        return true;
     }
 }
 
