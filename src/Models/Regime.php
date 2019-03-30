@@ -40,7 +40,7 @@ class Regime
         return $regime;
     }
 
-    public static function getRegimesByPatientId($pid, $asObjects = false)
+    public static function getRegimesByPatientId($pid)
     {
 
         $db = Database::getDatabase();
@@ -55,16 +55,24 @@ class Regime
             }
             $builtRegimes = [];
             foreach($regimes as $regime) {
-                if ($asObjects) {
-                    array_push($builtRegimes, self::factory($regime));
-                } else {
-                    array_push($builtRegimes, $regime);
-                }
+                array_push($builtRegimes, self::factory($regime));
             }
             return $builtRegimes;
         } catch (PDOException $exception) {
             return null;
         }
+    }
+
+    public function toAssoc()
+    {
+        return [
+            'regime_id' =>   $this->getRegimeId(),
+            'patient_id' =>  $this->getPatientId(),
+            'gp_id' =>       $this->getGpId(),
+            'start_date' =>  $this->getStartDate(),
+            'end_date' =>    $this->getEndDate(),
+            'frequency' =>   $this->getFrequency()
+        ];
     }
 
     /**

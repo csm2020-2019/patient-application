@@ -15,7 +15,11 @@ class RegimeController
     {
         $patient = Patient::getPatientByUserId($uid);
         if ($patient) {
-            $regimes = Regime::getRegimesByPatientId($patient->getPatientId(), false);
+            $results = Regime::getRegimesByPatientId($patient->getPatientId(), true);
+            $regimes = [];
+            foreach ($results as $result) {
+                array_push($regimes, $result->toAssoc());
+            }
             return $regimes;
         }
         return null;
