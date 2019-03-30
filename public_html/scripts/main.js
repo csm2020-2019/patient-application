@@ -117,7 +117,7 @@
         data: {
           token: Cookies.get('token'),
           request: 'regime',
-          regime-id: id
+          regime_id: id
         },
         success: function(data) {
           let formattedData = jQuery.parseJSON(JSON.stringify(data));
