@@ -6,7 +6,6 @@
 
     const API = 'api.php';
     let init = null;
-    let expiry = null;
     let token = null;
 
     // Success Flash Helper Function
@@ -59,7 +58,7 @@
         token =     Cookies.get('token');
       }
       // Expiry check
-      if ((Date.now() > expiry || !Cookies.get('token') || !Cookies.get('expiry')) && init === true) {
+      if ((Date.now() > Cookies.get('expiry') || !Cookies.get('token') || !Cookies.get('expiry')) && init === true) {
         alert('Your session has timed out! Returning you to the login page.');
         window.location.href = 'index.html';
       }
@@ -67,7 +66,7 @@
 
     // Root
     this.get('#/', function (context) {
-      context.partial('templates/home.template');
+      context.partial('templates/home.template').swap();
     });
 
     // Patient Page
@@ -81,7 +80,7 @@
         },
         success: function (data) {
           let formattedData = jQuery.parseJSON(JSON.stringify(data));
-          context.partial('templates/patient.template', {patient: formattedData.patient});
+          context.partial('templates/patient.template', {patient: formattedData.patient}).swap();
         },
         error: function (data) {
           printError(jQuery.parseJSON(JSON.stringify(data)));
@@ -100,7 +99,7 @@
         },
         success: function (data) {
           let formattedData = jQuery.parseJSON(JSON.stringify(data));
-          context.partial('templates/regimes.template', {regimes: formattedData.regimes});
+          context.partial('templates/regimes.template', {regimes: formattedData.regimes}).swap();
         },
         error: function (data) {
           printError(jQuery.parseJSON(JSON.stringify(data)));
@@ -121,8 +120,8 @@
         },
         success: function(data) {
           let formattedData = jQuery.parseJSON(JSON.stringify(data));
-          context.log(formattedData);
-          context.partial('templates/regime.template', {regime: formattedData.regime, trials: formattedData.trials});
+          context.partial('templates/regime.template',
+            {regime: formattedData.regime, trials: formattedData.trials}).swap();
         },
         error: function (data) {
           printError(jQuery.parseJSON(JSON.stringify(data)));
