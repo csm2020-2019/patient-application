@@ -105,7 +105,28 @@
         error: function (data) {
           printError(jQuery.parseJSON(JSON.stringify(data)));
         }
-      })
+      });
+    });
+
+    // Each individual regime
+    this.get('#regime/:id', function(context) {
+      let id = this.params('id');
+      $.ajax({
+        type: "POST",
+        url: API,
+        data: {
+          token: Cookies.get('token'),
+          request: 'regime',
+          regime-id: id
+        },
+        success: function(data) {
+          let formattedData = jQuery.parseJSON(JSON.stringify(data));
+          context.partial('templates/regime.template', {regime: formattedData.regime, trials: formattedData.trials});
+        },
+        error: function (data) {
+          printError(jQuery.parseJSON(JSON.stringify(data)));
+        }
+      });
     });
 
     // Sports Centres Page
