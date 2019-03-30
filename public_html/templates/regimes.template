@@ -1,0 +1,2 @@
+<h1 class="h2">Exercise Regimes</h1>
+<%= regimes %>

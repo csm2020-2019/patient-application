@@ -1,19 +1,15 @@
 "use strict";
 (function ($) {
   let app = $.sammy('#main', function () {
+    // Plugins
     this.use('Template');
-    const API = 'api.php';
 
+    const API = 'api.php';
     let init = null;
     let expiry = null;
     let token = null;
 
-    const printError = function (error) {
-      let fError = error.responseJSON.message.toString();
-      $('#errors').append(`<div id="error" class="alert alert-danger" role="alert"><strong>Error: </strong>${fError}</div>`);
-      window.scrollTo(0,0);
-    };
-
+    // Success Flash Helper Function
     const printSuccess = function (success) {
       if (!success) {
         success = 'Changes saved successfully!';
@@ -23,16 +19,19 @@
       window.scrollTo(0,0);
     };
 
+    // Error Flash Helper Function
+    const printError = function (error) {
+      let fError = error.responseJSON.message.toString();
+      $('#errors').append(`<div id="error" class="alert alert-danger" role="alert"><strong>Error: </strong>${fError}</div>`);
+      window.scrollTo(0,0);
+    };
+
+    // Error Clearing Middleware
     this.before('#/', function () {
-      // if (document.contains(document.getElementById('success'))) {
-      //   document.getElementById('success').remove();
-      // }
-      // if (document.contains(document.getElementById('error'))) {
-      //   document.getElementById('error').remove();
-      // }
       $('#errors').empty();
     });
 
+    // Authentication Middleware
     this.before('#/', function() {
       // The server will enforce token expiry. This just helps keep things clean.
       if (!init) {
@@ -54,14 +53,14 @@
       }
     });
 
-    // Routes!
-
+    // Root
     this.get('#/', function (context) {
       context.app.swap('');
       context.render('templates/home.template')
         .appendTo(context.$element());
     });
 
+    // Patient Page
     this.get('#/patient', function (context) {
       context.app.swap('');
       $.ajax({
@@ -83,6 +82,32 @@
       });
     });
 
+    // Regimes Page
+    this.get('#/regimes', function (context) {
+      $.ajax ({
+        type: "POST",
+        url: API,
+        data: {
+          token: Cookies.get('token'),
+          request: 'regimes'
+        },
+        success: function (data) {
+          let formattedData = jQuery.parseJSON(JSON.stringify(data));
+          context.log(formattedData);
+          context.render('templates/regimes.template', {regimes: formattedData.regimes})
+            .appendTo(context.$element());
+        },
+        error: function (data) {
+          printError(jQuery.parseJSON(JSON.stringify(data)));
+        }
+      })
+    });
+
+    // Sports Centres Page
+    this.get('#/sportscentres', function (context) {
+    });
+
+    // Patient Address Form
     this.post('#/patient/address', function (context) {
       $.ajax({
         type: "POST",
@@ -105,6 +130,7 @@
       });
     });
 
+    // Patient Email Form
     this.post('#/patient/email', function (context) {
       $.ajax({
         type: "POST",
@@ -124,6 +150,7 @@
       });
     });
 
+    // Patient Email Subscription Form
     this.post('#/patient/subscription', function (context) {
       $.ajax({
         type: "POST",
@@ -143,13 +170,7 @@
       });
     });
 
-    this.get('#/details', function (context) {
-
-    });
-
-    this.get('#/sportscentres', function (context) {
-    });
-
+    // Log Out
     this.get('#/logout', function (context) {
       //document.cookie = "token=;expires= Thu, 01 Jan 1970 00:00:00 GMT";
       Cookies.remove('token');
