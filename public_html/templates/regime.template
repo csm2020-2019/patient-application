@@ -1,6 +1,44 @@
-<h1 class="h2">Regime Details and Trials</h1>
+<% let start = new Date(regime.start_date).toDateString(); %>
+<% let end = new Date(regime.end_date).toDateString(); %>
+<h1 class="h2">Regime Details</h1>
 <% if (regime.length === 0) { %>
 <p>This regime either does not exist, or does not belong to you. <em>Mysterious.</em> Go <a href="#/regimes">back?</a></p>
 <% } else { %>
-
+<p>
+    This regime was started on <time datetime="<%= start %>"><%= start %></time> and
+    is set to finish on <time datetime="<%= end %>"><%= end %></time>.
+</p>
+<p>
+    It was assigned to you by
+    <a href="mailto:<%= regime.gp.gp_email %>"><%= regime.gp.gp_first_name %> <%=regime.gp.gp_last_name %></a>.
+</p>
+<h2>Trials</h2>
+<% if (regime.trials.length === 0) { %>
+<p>You do not yet have any trials assigned to you.</p>
+<% } else { %>
+<table class="table table-responsive table-striped">
+    <thead>
+    <tr>
+        <th>Trial Number</th>
+        <th>Exercise Type</th>
+        <th>Exercise Duration</th>
+        <th>Intensity <em>(Speed)</em></th>
+        <th>Intensity <em>(Slope)</em></th>
+        <th>Completion Time</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% for (let i = 0; i < regime.trials.length; i++) { %>
+    <tr>
+        <td><%= (i + 1) %></td>
+        <td><mark><%= regime.trials[i].type %></mark></td>
+        <td><%= regime.trials[i].duration %></td>
+        <td><%= regime.trials[i].intensity_speed %></td>
+        <td><%= regime.trials[i].intensity_slope %></td>
+        <td><%= regime.trials[i].completed_time %></td>
+    </tr>
+    <% } %>
+    </tbody>
+</table>
+<% } %>
 <% } %>
