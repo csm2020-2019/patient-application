@@ -104,7 +104,7 @@ class Router
                 break;
             case 'regime':
                 $regimeController = new RegimeController();
-                $this->responseData['regime'] = $regimeController->regime($_POST['regime_id']);
+                $this->responseData['regime'] = $regimeController->regime($_POST['regime_id'], $this->user->getUserId());
                 if ($this->responseData['regime'] === null) {
                     return $this->error(self::UNAUTHORISED, $tokenData);
                 }

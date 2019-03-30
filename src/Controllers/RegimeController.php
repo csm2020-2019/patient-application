@@ -25,20 +25,23 @@ class RegimeController
         return null;
     }
 
-    public function regime($rid)
+    public function regime($rid, $uid)
     {
-        $regime = Regime::getRegimeByRegimeId($rid);
-        if ($regime !== null) {
-            if ($regime === false) {
-                return [];
+        $patient = Patient::getPatientByUserId($uid);
+        if ($patient) {
+            $regime = Regime::getRegimeByRegimeId($rid, $patient->getPatientId());
+            if ($regime !== null) {
+                if ($regime === false) {
+                    return [];
+                }
+                $dataArray = $regime->toAssoc();
+                $dataArray['trials'] = [];
+
+                $trialsController = new TrialsController();
+                $dataArray['trials'] = $trialsController->getTrialsByRegimeId($rid);
+
+                return $dataArray;
             }
-            $dataArray = $regime->toAssoc();
-            $dataArray['trials'] = [];
-
-            $trialsController = new TrialsController();
-            $dataArray['trials'] = $trialsController->getTrialsByRegimeId($rid);
-
-            return $dataArray;
         }
         return null;
     }

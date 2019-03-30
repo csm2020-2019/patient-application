@@ -40,17 +40,19 @@ class Regime
         return $regime;
     }
 
-    public static function getRegimeByRegimeId($rid)
+    public static function getRegimeByRegimeId($rid, $pid)
     {
         $rid = Database::sanitise($rid);
-        if (!$rid) {
+        $pid = Database::sanitise($pid);
+        if (!$rid || !$pid) {
             return null;
         }
 
         $db = Database::getDatabase();
         try {
-            $stmt = $db->prepare('SELECT * FROM exercise_regimes WHERE regime_id = :rid LIMIT 1');
+            $stmt = $db->prepare('SELECT * FROM exercise_regimes WHERE regime_id = :rid AND patient_id = :pid LIMIT 1');
             $stmt->bindParam(':rid', $rid);
+            $stmt->bindParam(':pid', $pid);
             $stmt->execute();
             $ingredients = $stmt->fetch(PDO::FETCH_ASSOC);
             if (!$ingredients) {
