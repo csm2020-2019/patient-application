@@ -60,6 +60,11 @@ class Patient
 
     public static function getPatientByPatientId($pid)
     {
+        $pid = Database::sanitise($pid);
+        if (!$pid) {
+            return null;
+        }
+
         $db = Database::getDatabase();
         try {
             $stmt = $db->prepare('SELECT * FROM patient_records WHERE patient_id = :pid LIMIT 1');
@@ -72,6 +77,11 @@ class Patient
 
     public static function getPatientByUserId($uid)
     {
+        $uid = Database::sanitise($uid);
+        if (!$uid) {
+            return null;
+        }
+
         $db = Database::getDatabase();
         try {
             $stmt = $db->prepare('SELECT * FROM patient_records WHERE userId = :uid LIMIT 1');

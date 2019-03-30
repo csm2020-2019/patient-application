@@ -15,7 +15,7 @@ class RegimeController
     {
         $patient = Patient::getPatientByUserId($uid);
         if ($patient) {
-            $results = Regime::getRegimesByPatientId($patient->getPatientId(), true);
+            $results = Regime::getRegimesByPatientId($patient->getPatientId());
             $regimes = [];
             foreach ($results as $result) {
                 array_push($regimes, $result->toAssoc());
@@ -28,8 +28,17 @@ class RegimeController
     public function regime($rid)
     {
         $regime = Regime::getRegimeByRegimeId($rid);
-        if ($regime) {
-            return $regime;
+        if ($regime !== null) {
+            if ($regime === false) {
+                return [];
+            }
+            $dataArray = $regime->toAssoc();
+            $dataArray['trials'] = [];
+
+            $trialsController = new TrialsController();
+            $dataArray['trials'] = $trialsController->getTrialsByRegimeId($rid);
+
+            return $dataArray;
         }
         return null;
     }
