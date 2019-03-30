@@ -25,9 +25,7 @@ class Regime
         $this->frequency = $frequency;
     }
 
-    private function __clone()
-    {
-    }
+    private function __clone() {}
 
     public static function factory(array $ingredients)
     {
@@ -40,6 +38,32 @@ class Regime
             $ingredients['frequency']
         );
         return $regime;
+    }
+
+    public static function getRegimesByPatientId($pid, $asObjects = false)
+    {
+        $db = Database::getDatabase();
+        try {
+            $stmt = $db->prepare('SELECT * FROM exercise_regimes WHERE patient_id = :pid');
+            $stmt->bindParam(':pid', $pid);
+            $stmt->execute();
+
+            $regimes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if (!$regimes) {
+                return [];
+            }
+            $builtRegimes = [];
+            foreach($regimes as $regime) {
+                if ($asObjects) {
+                    array_push($builtRegimes, self::factory($regime));
+                } else {
+                    array_push($builtRegimes, $regime);
+                }
+            }
+            return $builtRegimes;
+        } catch (PDOException $exception) {
+            return null;
+        }
     }
 
     /**

@@ -70,7 +70,8 @@ class Router
                 break;
             case 'patient-address':
                 $controller = new PatientController();
-                if (!$controller->address($_POST['address1'],
+                if (!$controller->address(
+                    $_POST['address1'],
                     $_POST['address2'],
                     $_POST['town'],
                     $_POST['postcode'],
@@ -80,19 +81,28 @@ class Router
                 break;
             case 'patient-email':
                 $controller = new PatientController();
-                if (!$controller->email($_POST['email'], $this->user->getUserId())) {
+                if (!$controller->email(
+                    $_POST['email'],
+                    $this->user->getUserId())) {
                     return $this->error(self::BAD_EMAIL, $tokenData);
                 }
                 break;
             case 'patient-subscription':
                 $controller = new PatientController();
-                if (!$controller->emailSubscription($_POST['subscription'], $this->user->getUserId())) {
+                if (!$controller->emailSubscription(
+                    $_POST['subscription'],
+                    $this->user->getUserId())) {
                     return $this->error(self::SUBMISSION_FAILURE, $tokenData);
                 }
                 break;
             case 'regimes':
+                $controller = new RegimeController();
+                if (!$this->responseData['regimes'] = $controller->regimes($this->user->getUserId())) {
+                    return $this->error(self::UNAUTHORISED, $tokenData);
+                }
+                var_dump($this->responseData);
+                die;
                 break;
-
             case 'sportscentres':
                 break;
             default:
