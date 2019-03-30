@@ -97,7 +97,8 @@ class Router
                 break;
             case 'regimes':
                 $controller = new RegimeController();
-                if (!$this->responseData['regimes'] = $controller->regimes($this->user->getUserId())) {
+                $this->responseData['regimes'] = $controller->regimes($this->user->getUserId());
+                if ($this->responseData['regimes'] === null) {
                     return $this->error(self::UNAUTHORISED, $tokenData);
                 }
                 break;

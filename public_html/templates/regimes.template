@@ -1,2 +1,10 @@
 <h1 class="h2">Exercise Regimes</h1>
-<%= regimes %>
+<% if (regimes.length === 0) { %>
+<p>You haven't been assigned any exercise regimes.</p>
+<% } else { %>
+    <ul>
+    <% for (let i = 0; i < regimes.length; i++) { %>
+        <li><%= regimes[i].patient_id %></li>
+    <% } %>
+    </ul>
+<% } %>
