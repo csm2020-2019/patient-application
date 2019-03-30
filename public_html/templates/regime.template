@@ -1,0 +1,6 @@
+<h1 class="h2">Regime Details and Trials</h1>
+<% if (regime.length === 0) { %>
+<p>This regime either does not exist, or does not belong to you. <em>Mysterious.</em> Go <a href="#/regimes">back?</a></p>
+<% } else { %>
+
+<% } %>
