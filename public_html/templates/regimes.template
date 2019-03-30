@@ -1,10 +1,21 @@
 <h1 class="h2">Exercise Regimes</h1>
 <% if (regimes.length === 0) { %>
-<p>You haven't been assigned any exercise regimes.</p>
+<p><strong>You haven't been assigned any exercise regimes.</strong></p>
 <% } else { %>
-    <ul>
+    <div class="row">
     <% for (let i = 0; i < regimes.length; i++) { %>
-        <li><%= regimes[i].patient_id %></li>
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
+                    <% let start = new Date(regimes[i].start_date).toDateString(); %>
+                    <% let end = new Date(regimes[i].end_date).toDateString(); %>
+                    <h5 class="card-title">Regime <%=regimes[i].regime_id %></h5>
+                    <p class="card-text">Starting Date: <time datetime="<%= start %>"><%= start %></time></p>
+                    <p class="card-text">Ending Date: <time datetime="<%= end %>"><%= end %></time></p>
+                    <a href="#/regimes/<%= regimes[i].regime_id %>" class="btn btn-primary">View Trials</a>
+                </div>
+            </div>
+        </div>
     <% } %>
-    </ul>
+    </div>
 <% } %>
