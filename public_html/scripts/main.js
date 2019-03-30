@@ -15,14 +15,26 @@
         success = 'Changes saved successfully!';
       }
       let fSuccess = success.toString();
-      $('#errors').append(`<div id="success" class="alert alert-success" role="success"><strong>Success: </strong>${fSuccess}</div>`);
+      $('#errors').append(
+        `<div id="success" class="alert alert-success alert-dismissible fade show" role="success">
+         <strong>Success:</strong> ${fSuccess} - <em>${new Date(Date.now()).toUTCString()}</em>
+         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+         <span aria-hidden="true">&times;</span>
+         </button>
+         </div>`);
       window.scrollTo(0,0);
     };
 
     // Error Flash Helper Function
     const printError = function (error) {
       let fError = error.responseJSON.message.toString();
-      $('#errors').append(`<div id="error" class="alert alert-danger" role="alert"><strong>Error: </strong>${fError}</div>`);
+      $('#errors').append(
+        `<div id="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+         <strong>Error: </strong>${fError} - <em>${new Date(Date.now()).toUTCString()}</em>
+         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+         <span aria-hidden="true">&times;</span>
+         </button>
+         </div>`);
       window.scrollTo(0,0);
     };
 
@@ -133,8 +145,8 @@
           email: $('#email-address').val()
         },
         success: function (data) {
-          context.log(data);
           printSuccess();
+          app.refresh();
         },
         error: function (data) {
           printError(jQuery.parseJSON(JSON.stringify(data)))
