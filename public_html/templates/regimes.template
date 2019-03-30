@@ -10,8 +10,8 @@
                     <% let start = new Date(regimes[i].start_date).toDateString(); %>
                     <% let end = new Date(regimes[i].end_date).toDateString(); %>
                     <h5 class="card-title">Regime <%=regimes[i].regime_id %></h5>
-                    <p class="card-text">Starting Date: <time datetime="<%= start %>"><%= start %></time></p>
-                    <p class="card-text">Ending Date: <time datetime="<%= end %>"><%= end %></time></p>
+                    <p class="card-text"><strong>Starting Date:</strong> <time datetime="<%= start %>"><%= start %></time></p>
+                    <p class="card-text"><strong>Ending Date:</strong> <time datetime="<%= end %>"><%= end %></time></p>
                     <a href="#/regimes/<%= regimes[i].regime_id %>" class="btn btn-primary">View Trials</a>
                 </div>
             </div>
