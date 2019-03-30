@@ -15,7 +15,7 @@
         success = 'Changes saved successfully!';
       }
       let fSuccess = success.toString();
-      $('#errors').append(`<div id="success" class="success alert-success" role="success"><strong>Success: </strong>${fSuccess}</div>`);
+      $('#errors').append(`<div id="success" class="alert alert-success" role="success"><strong>Success: </strong>${fSuccess}</div>`);
       window.scrollTo(0,0);
     };
 
@@ -55,14 +55,11 @@
 
     // Root
     this.get('#/', function (context) {
-      context.app.swap('');
-      context.render('templates/home.template')
-        .appendTo(context.$element());
+      context.partial('templates/home.template');
     });
 
     // Patient Page
     this.get('#/patient', function (context) {
-      context.app.swap('');
       $.ajax({
         type: "POST",
         url: API,
@@ -72,9 +69,7 @@
         },
         success: function (data) {
           let formattedData = jQuery.parseJSON(JSON.stringify(data));
-          //context.log(formattedData);
-          context.render('templates/patient.template', {patient: formattedData.patient})
-            .appendTo(context.$element());
+          context.partial('templates/patient.template', {patient: formattedData.patient});
         },
         error: function (data) {
           printError(jQuery.parseJSON(JSON.stringify(data)));
@@ -93,9 +88,7 @@
         },
         success: function (data) {
           let formattedData = jQuery.parseJSON(JSON.stringify(data));
-          context.log(formattedData);
-          context.render('templates/regimes.template', {regimes: formattedData.regimes})
-            .appendTo(context.$element());
+          context.partial('templates/regimes.template', {regimes: formattedData.regimes});
         },
         error: function (data) {
           printError(jQuery.parseJSON(JSON.stringify(data)));
@@ -121,7 +114,6 @@
           postcode: $('#postcode').val()
         },
         success: function (data) {
-          context.log(data);
           printSuccess();
         },
         error: function (data) {
@@ -172,7 +164,6 @@
 
     // Log Out
     this.get('#/logout', function (context) {
-      //document.cookie = "token=;expires= Thu, 01 Jan 1970 00:00:00 GMT";
       Cookies.remove('token');
       Cookies.remove('expiry');
       this.redirect('#/');
