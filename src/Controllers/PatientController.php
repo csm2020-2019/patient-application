@@ -1,55 +1,29 @@
 <?php
 namespace csm2020\PatientApp\Controllers;
 
-use csm2020\PatientApp\Database\Database;
 use csm2020\PatientApp\Models\Patient;
-
-use PDO;
-use PDOException;
 
 class PatientController
 {
-    private $db;
-
-    public function __construct()
-    {
-        $this->db = Database::getDatabase();
-    }
+    public function __construct() {}
 
     public function get($id)
     {
         $patientData = [];
-        if (!$id) {
-            return null;
-        }
-        try {
-            $stmt = $this->db->prepare('SELECT * FROM patient_records WHERE userId = :uid LIMIT 1');
-            $stmt->bindParam(':uid', $id);
-            $stmt->execute();
+        $patient = Patient::getPatientByUserId($id);
 
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            if (!$result) {
-                return null;
-            }
+        $patientData['displayable'] =   $patient->displayable();
+        $patientData['editable'] =      $patient->editable();
 
-            $patient = Patient::factory($result);
-
-            $patientData['displayable'] =   $patient->displayable();
-            $patientData['editable'] =      $patient->editable();
-
-            return $patientData;
-        } catch (PDOException $e) {
-            return null;
-        }
+        return $patientData;
     }
-
-    public function post(array $ingredients) {}
 
     public function address($address1, $address2, $town, $postcode, $uid)
     {
-        if (!$address1 || !$town || !$postcode || !$uid) {
+        if (!$this->validateAddress([$address1, $address2, $town, $postcode])) {
             return null;
         }
+
         // Cleanse tags of any funny business
         $address1 =     trim(stripslashes(htmlspecialchars(strip_tags($address1))));
         if ($address2) {
@@ -61,21 +35,30 @@ class PatientController
         $town =         trim(stripslashes(htmlspecialchars(strip_tags($town))));
         $postcode =     trim(stripslashes(htmlspecialchars(strip_tags($postcode))));
 
-        // One last check on the postcode
-        // https://stackoverflow.com/questions/14935013/preg-match-regex-required-for-specific-uk-postcode-area-code
-        $accepted_numbers = array_merge(range(15, 22), range(31, 41));
-        if (!preg_match('#^(GIR ?0AA|[A-PR-UWYZ]([0-9]{1,2}|([A-HK-Y][0-9]([0-9ABEHMNPRV-Y])?)|[0-9][A-HJKPS-UW]) ?[0-9][ABD-HJLNP-UW-Z]{2})$#', $postcode) && !substr($postcode, 0, 2) == 'DN' && !in_array(substr($postcode, 2, 2), $accepted_numbers)) {
-            return null;
-        }
         $address = "${address1}, ${address2} ${town}, ${postcode}";
-        try {
-            $stmt = $this->db->prepare(
-                'UPDATE patient_records SET patient_address = :address WHERE userId = :uid');
-            $stmt->bindParam(':address', $address);
-            $stmt->bindParam(':uid', $uid);
-            $stmt->execute();
-        } catch (PDOException $e) {
-            return null;
+
+        $patient = Patient::getPatientByUserId($uid);
+        if ($patient) {
+            $patient->setAddress($address);
+            if ($patient->update()) {
+                return true;
+            }
+        }
+        return null;
+    }
+
+    private function validateAddress(array $components)
+    {
+        if ($components[1] === null) {
+            array_pop($components[1]); // Address 2, which is optional
+        }
+        foreach ($components as $component) {
+            if ($component === null)  {
+                return false;
+            }
+            if (strlen($component) > 30 || strlen($component) < 4) {
+                return false;
+            }
         }
         return true;
     }
@@ -90,16 +73,14 @@ class PatientController
             return null;
         }
 
-        try {
-            $stmt = $this->db->prepare(
-                'UPDATE patient_records SET patient_email = :email WHERE userId = :uid');
-            $stmt->bindParam(':email', $email);
-            $stmt->bindParam(':uid', $uid);
-            $stmt->execute();
-        } catch (PDOException $e) {
-            return null;
+        $patient = Patient::getPatientByUserId($uid);
+        if ($patient) {
+            $patient->setEmail($email);
+            if ($patient->update()) {
+                return true;
+            }
         }
-        return true;
+        return null;
     }
 
     public function emailSubscription($checkbox, $uid)
@@ -114,16 +95,14 @@ class PatientController
             $checkbox = 0;
         }
 
-        try {
-            $stmt = $this->db->prepare(
-                'UPDATE patient_records SET patient_email_prescription = :sub WHERE userId = :uid');
-            $stmt->bindParam(':sub', $checkbox);
-            $stmt->bindParam(':uid', $uid);
-            $stmt->execute();
-        } catch (PDOException $e) {
-            return null;
+        $patient = Patient::getPatientByUserId($uid);
+        if ($patient) {
+            $patient->setSubscription($checkbox);
+            if ($patient->update()) {
+                return true;
+            }
         }
-        return true;
+        return null;
     }
 }
 

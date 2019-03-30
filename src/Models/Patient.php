@@ -1,6 +1,12 @@
 <?php
 namespace csm2020\PatientApp\Models;
 
+use csm2020\PatientApp\Database\Database;
+
+use PDO;
+use PDOException;
+use PDOStatement;
+
 class Patient
 {
     private $patientId;
@@ -50,6 +56,66 @@ class Patient
             $ingredients['userId']
         );
         return $patient;
+    }
+
+    public static function getPatientByPatientId($pid)
+    {
+        $db = Database::getDatabase();
+        try {
+            $stmt = $db->prepare('SELECT * FROM patient_records WHERE patient_id = :pid LIMIT 1');
+            $stmt->bindParam(':pid', $pid);
+            return self::getPatient($stmt);
+        } catch (PDOException $exception) {
+            return null;
+        }
+    }
+
+    public static function getPatientByUserId($uid)
+    {
+        $db = Database::getDatabase();
+        try {
+            $stmt = $db->prepare('SELECT * FROM patient_records WHERE userId = :uid LIMIT 1');
+            $stmt->bindParam(':uid', $uid);
+            return self::getPatient($stmt);
+        } catch (PDOException $exception) {
+            return null;
+        }
+    }
+
+    private static function getPatient(PDOStatement $stmt)
+    {
+        $stmt->execute();
+        $ingredients = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$ingredients) {
+            return null;
+        }
+        return self::factory($ingredients);
+    }
+
+    public function update()
+    {
+        $db = Database::getDatabase();
+
+        // You have to do this to avoid pass by reference errors...
+        $address =          $this->getAddress();
+        $email =            $this->getEmail();
+        $sub =              $this->getSubscription();
+        $pid =              $this->getPatientId();
+
+        try {
+            $stmt = $db->prepare('UPDATE patient_records SET 
+                           patient_address = :address, 
+                           patient_email = :email,
+                           patient_email_prescription = :sub WHERE patient_id = :pid');
+            $stmt->bindParam(':address', $address);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':sub', $sub);
+            $stmt->bindParam(':pid', $pid);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            return null;
+        }
+        return true;
     }
 
     public function displayable()

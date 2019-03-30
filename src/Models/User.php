@@ -27,6 +27,8 @@ class User
         $this->userType =       $userType;
     }
 
+    private function __clone() {}
+
     public static function factory($ingredients)
     {
         $user = new User(

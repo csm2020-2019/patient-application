@@ -1,6 +1,11 @@
 <?php
 namespace csm2020\PatientApp\Models;
 
+use csm2020\PatientApp\Database\Database;
+
+use PDO;
+use PDOException;
+
 class Regime
 {
     private $regimeId;
@@ -12,15 +17,17 @@ class Regime
 
     private function __construct($regimeId, $patientId, $gpId, $startDate, $endDate, $frequency)
     {
-        $this->regimeId =   $regimeId;
-        $this->patientId =  $patientId;
-        $this->gpId =       $gpId;
-        $this->startDate =  $startDate;
-        $this->endDate =    $endDate;
-        $this->frequency =  $frequency;
+        $this->regimeId = $regimeId;
+        $this->patientId = $patientId;
+        $this->gpId = $gpId;
+        $this->startDate = $startDate;
+        $this->endDate = $endDate;
+        $this->frequency = $frequency;
     }
 
-    private function __clone() {}
+    private function __clone()
+    {
+    }
 
     public static function factory(array $ingredients)
     {
