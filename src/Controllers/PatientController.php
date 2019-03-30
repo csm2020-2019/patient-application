@@ -2,6 +2,7 @@
 namespace csm2020\PatientApp\Controllers;
 
 use csm2020\PatientApp\Models\Patient;
+use csm2020\PatientApp\Database\Database;
 
 class PatientController
 {
@@ -20,21 +21,19 @@ class PatientController
 
     public function address($address1, $address2, $town, $postcode, $uid)
     {
+        $address1 =     Database::sanitise($address1);
+        $address2 =     Database::sanitise($address2);
+        $town =         Database::sanitise($town);
+        $postcode =     Database::sanitise($postcode);
+
         if (!$this->validateAddress([$address1, $address2, $town, $postcode])) {
             return null;
         }
-
-        // Cleanse tags of any funny business
-        $address1 =     trim(stripslashes(htmlspecialchars(strip_tags($address1))));
         if ($address2) {
-            $address2 = trim(stripslashes(htmlspecialchars(strip_tags($address2))));
             $address2 = "{$address2},";
         } else {
             $address2 = '';
         }
-        $town =         trim(stripslashes(htmlspecialchars(strip_tags($town))));
-        $postcode =     trim(stripslashes(htmlspecialchars(strip_tags($postcode))));
-
         $address = "${address1}, ${address2} ${town}, ${postcode}";
 
         $patient = Patient::getPatientByUserId($uid);
@@ -65,6 +64,8 @@ class PatientController
 
     public function email($email, $uid)
     {
+        $email = Database::sanitise($email);
+
         if (!$email || !$uid) {
             return null;
         }
@@ -85,6 +86,8 @@ class PatientController
 
     public function emailSubscription($checkbox, $uid)
     {
+        Database::sanitise($checkbox);
+
         if (!$checkbox || !$uid) {
             return null;
         }

@@ -28,4 +28,9 @@ class Database
         }
         return self::$db;
     }
+
+    public static function sanitise($input)
+    {
+        return trim(stripslashes(htmlspecialchars(strip_tags($input))));
+    }
 }

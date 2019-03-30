@@ -102,6 +102,13 @@ class Router
                     return $this->error(self::UNAUTHORISED, $tokenData);
                 }
                 break;
+            case 'regime':
+                $regimeController = new RegimeController();
+                $this->responseData['regime'] = $regimeController->regime($_POST['regime-id']);
+                if ($this->responseData['regime'] === null) {
+                    return $this->error(self::UNAUTHORISED, $tokenData);
+                }
+                break;
             case 'sportscentres':
                 break;
             default:

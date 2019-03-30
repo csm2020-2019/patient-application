@@ -42,6 +42,7 @@ class Regime
 
     public static function getRegimesByPatientId($pid, $asObjects = false)
     {
+
         $db = Database::getDatabase();
         try {
             $stmt = $db->prepare('SELECT * FROM exercise_regimes WHERE patient_id = :pid');
