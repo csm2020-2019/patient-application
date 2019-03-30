@@ -1,6 +1,11 @@
 <?php
 namespace csm2020\PatientApp\Models;
 
+use csm2020\PatientApp\Database\Database;
+
+use PDO;
+use PDOException;
+
 class User
 {
     private $userId;
@@ -24,7 +29,7 @@ class User
 
     public static function factory($ingredients)
     {
-        return new User(
+        $user = new User(
             $ingredients['userId'],
             $ingredients['username'],
             $ingredients['userPassword'],
@@ -33,6 +38,25 @@ class User
             $ingredients['userLastName'],
             $ingredients['userType']
         );
+            return $user;
+    }
+
+    public static function getUserById($uid)
+    {
+        $db = Database::getDatabase();
+        try {
+            $stmt = $db->prepare('SELECT * FROM user WHERE userId = :uid LIMIT 1');
+            $stmt->bindParam(':uid', $uid);
+            $stmt->execute();
+
+            $ingredients = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (count($ingredients) === 0) {
+                return null;
+            }
+        } catch (PDOException $e) {
+            return null;
+        }
+        return self::factory($ingredients);
     }
 
     public function getDisplayableInfo()
@@ -45,6 +69,7 @@ class User
             'email'       => $this->getUserEmail(),
         ];
     }
+
     /**
      * @return mixed
      */
@@ -156,4 +181,6 @@ class User
     {
         $this->userType = $userType;
     }
+
+
 }

@@ -4,7 +4,7 @@ namespace csm2020\PatientApp\Router;
 use csm2020\PatientApp\Authentication\Authentication;
 use csm2020\PatientApp\Controllers\PatientController;
 use csm2020\PatientApp\Controllers\RegimeController;
-use csm2020\PatientApp\Controllers\UserController;
+use csm2020\PatientApp\Models\User;
 
 class Router
 {
@@ -46,11 +46,10 @@ class Router
         if (!isset($tokenData)) {
             return $this->error(self::UNAUTHORISED);
         }
-        $this->responseData     = $tokenData;
 
-        $userController             = new UserController();
-        $this->user                 = $userController->getUserById($this->auth->getId($_POST['token']));
-        $this->responseData['user'] = $this->user->getDisplayableInfo();
+        $this->responseData             = $tokenData;
+        $this->user                     = User::getUserById($this->auth->getId($_POST['token']));
+        $this->responseData['user']     = $this->user->getDisplayableInfo();
 
         // Did they send a request?
         if (!isset($_POST['request'])) {
@@ -68,7 +67,6 @@ class Router
                     return $this->error(self::UNAUTHORISED, $tokenData);
                     break;
                 }
-                //$this->responseData['patient'] = $controller->get($this->userId);
                 break;
             case 'patient-address':
                 $controller = new PatientController();
@@ -76,7 +74,7 @@ class Router
                     $_POST['address2'],
                     $_POST['town'],
                     $_POST['postcode'],
-                    $this->userId)) {
+                    $this->user->getUserId())) {
                     return $this->error(self::SUBMISSION_FAILURE, $tokenData);
                 }
                 break;
@@ -94,6 +92,7 @@ class Router
                 break;
             case 'regimes':
                 break;
+
             case 'sportscentres':
                 break;
             default:

@@ -33,4 +33,9 @@ class UserController
             return null;
         }
     }
+
+    public function findPatientId($uid)
+    {
+
+    }
 }
