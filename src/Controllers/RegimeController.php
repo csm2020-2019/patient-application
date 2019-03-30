@@ -20,4 +20,13 @@ class RegimeController
         }
         return null;
     }
+
+    public function regime($rid)
+    {
+        $regime = Regime::getRegimeByRegimeId($rid);
+        if ($regime) {
+            return $regime;
+        }
+        return null;
+    }
 }
