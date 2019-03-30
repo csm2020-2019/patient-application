@@ -11,45 +11,35 @@
 </head>
 
 <body>
-<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+<nav class="navbar navbar-expand-md navbar-dark sticky-top bg-dark fixed-top flex-md-nowrap p-0">
   <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Diabetes Assistant</a>
-  <ul class="navbar-nav px-3">
-    <li class="nav-item text-nowrap">
-      <a id="logout" class="nav-link" href="#/logout">Log Out</a>
-    </li>
-  </ul>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#/">Home</a>
+      </li>
+      <li class="nav-item dropdown active">
+        <a class="nav-link dropdown-toggle" href="" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Your Programme</a>
+        <div class="dropdown-menu" aria-labelledby="dropdown01">
+          <a class="dropdown-item" href="#/patient">Personal Details</a>
+          <a class="dropdown-item" href="#/regimes">Exercise Regimes</a>
+          <a class="dropdown-item" href="#/sportscentres">Sports Centres</a>
+        </div>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="#/logout">Log Out</a>
+      </li>
+    </ul>
+  </div>
 </nav>
 
 <div class="container-fluid">
   <div class="row">
-    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-      <div class="sidebar-sticky">
-        <ul class="nav flex-column">
-          <li class="nav-item">
-            <a class="nav-link" href="#/">
-              Home
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#/patient">
-              Your Details
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#/regimes">
-              Exercise Regimes
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#/sportscentres">
-              Sport Centres
-            </a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-
-    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+    <main role="main" class="col-md-12 ml-sm-auto col-lg-12 pt-3 px-4">
       <div id="errors"></div>
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
         <div id="main"></div>
