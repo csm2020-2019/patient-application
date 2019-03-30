@@ -1,11 +1,6 @@
 <?php
 namespace csm2020\PatientApp\Models;
 
-use csm2020\PatientApp\Database\Database;
-
-use PDO;
-use PDOException;
-
 class Patient
 {
     private $patientId;

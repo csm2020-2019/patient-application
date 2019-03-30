@@ -3,7 +3,7 @@ namespace csm2020\PatientApp\Router;
 
 use csm2020\PatientApp\Authentication\Authentication;
 use csm2020\PatientApp\Controllers\PatientController;
-//use csm2020\PatientApp\Models\Patient;
+use csm2020\PatientApp\Controllers\RegimeController;
 
 class Router
 {
@@ -89,8 +89,9 @@ class Router
                     return $this->error(self::SUBMISSION_FAILURE, $tokenData);
                 }
                 break;
-            case 'programmes':
-                // Spin up the controller and do stuff
+            case 'regimes':
+                break;
+            case 'sportscentres':
                 break;
             default:
                 return $this->error(self::UNRECOGNISED_COMMAND, $tokenData);
