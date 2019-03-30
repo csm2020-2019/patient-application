@@ -109,8 +109,8 @@
     });
 
     // Each individual regime
-    this.get('#regime/:id', function(context) {
-      let id = this.params('id');
+    this.get('#/regimes/:id', function(context) {
+      let id = this.params['id'];
       $.ajax({
         type: "POST",
         url: API,
@@ -121,6 +121,7 @@
         },
         success: function(data) {
           let formattedData = jQuery.parseJSON(JSON.stringify(data));
+          context.log(formattedData);
           context.partial('templates/regime.template', {regime: formattedData.regime, trials: formattedData.trials});
         },
         error: function (data) {
