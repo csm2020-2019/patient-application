@@ -100,8 +100,6 @@ class Router
                 if (!$this->responseData['regimes'] = $controller->regimes($this->user->getUserId())) {
                     return $this->error(self::UNAUTHORISED, $tokenData);
                 }
-                var_dump($this->responseData);
-                die;
                 break;
             case 'sportscentres':
                 break;
