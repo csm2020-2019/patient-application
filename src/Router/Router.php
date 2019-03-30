@@ -4,6 +4,7 @@ namespace csm2020\PatientApp\Router;
 use csm2020\PatientApp\Authentication\Authentication;
 use csm2020\PatientApp\Controllers\PatientController;
 use csm2020\PatientApp\Controllers\RegimeController;
+use csm2020\PatientApp\Controllers\UserController;
 
 class Router
 {
@@ -15,13 +16,13 @@ class Router
 
     private $auth;
     private $responseData = [];
-    private $userId;
+    private $user;
 
     public function __construct()
     {
         $this->auth = new Authentication();
         $this->responseData = [];
-        $this->userId = null;
+        $this->user = null;
     }
 
     public function route()
@@ -45,9 +46,11 @@ class Router
         if (!isset($tokenData)) {
             return $this->error(self::UNAUTHORISED);
         }
-        $this->userId           = $this->auth->getId($_POST['token']);
         $this->responseData     = $tokenData;
 
+        $userController             = new UserController();
+        $this->user                 = $userController->getUserById($this->auth->getId($_POST['token']));
+        $this->responseData['user'] = $this->user->getDisplayableInfo();
 
         // Did they send a request?
         if (!isset($_POST['request'])) {
@@ -61,7 +64,7 @@ class Router
                 break;
             case 'patient':
                 $controller = new PatientController();
-                if (!$this->responseData['patient'] = $controller->get($this->userId)) {
+                if (!$this->responseData['patient'] = $controller->get($this->user->getUserId())) {
                     return $this->error(self::UNAUTHORISED, $tokenData);
                     break;
                 }
@@ -79,13 +82,13 @@ class Router
                 break;
             case 'patient-email':
                 $controller = new PatientController();
-                if (!$controller->email($_POST['email'], $this->userId)) {
+                if (!$controller->email($_POST['email'], $this->user->getUserId())) {
                     return $this->error(self::BAD_EMAIL, $tokenData);
                 }
                 break;
             case 'patient-subscription':
                 $controller = new PatientController();
-                if (!$controller->emailSubscription($_POST['subscription'], $this->userId)) {
+                if (!$controller->emailSubscription($_POST['subscription'], $this->user->getUserId())) {
                     return $this->error(self::SUBMISSION_FAILURE, $tokenData);
                 }
                 break;

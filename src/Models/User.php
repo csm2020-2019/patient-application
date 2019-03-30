@@ -8,7 +8,43 @@ class User
     private $userPassword;
     private $userEmail;
     private $userFirstName;
+    private $userLastName;
+    private $userType;
 
+    private function __construct($uid, $username, $password, $email, $firstName, $lastName, $userType)
+    {
+        $this->userId =         $uid;
+        $this->username =       $username;
+        $this->userPassword =   $password;
+        $this->userEmail =      $email;
+        $this->userFirstName =  $firstName;
+        $this->userLastName =   $lastName;
+        $this->userType =       $userType;
+    }
+
+    public static function factory($ingredients)
+    {
+        return new User(
+            $ingredients['userId'],
+            $ingredients['username'],
+            $ingredients['userPassword'],
+            $ingredients['userEmail'],
+            $ingredients['userFirstName'],
+            $ingredients['userLastName'],
+            $ingredients['userType']
+        );
+    }
+
+    public function getDisplayableInfo()
+    {
+        return [
+            'uid'         => $this->getUserId(),
+            'username'    => $this->getUsername(),
+            'firstName'   => $this->getUserFirstName(),
+            'lastName'    => $this->getUserLastName(),
+            'email'       => $this->getUserEmail(),
+        ];
+    }
     /**
      * @return mixed
      */
@@ -119,18 +155,5 @@ class User
     public function setUserType($userType)
     {
         $this->userType = $userType;
-    }
-    private $userLastName;
-    private $userType;
-
-    public function __construct($uid, $username, $password, $email, $firstName, $lastName, $userType)
-    {
-        $this->userId =         $uid;
-        $this->username =       $username;
-        $this->userPassword =   $password;
-        $this->userEmail =      $email;
-        $this->userFirstName =  $firstName;
-        $this->userLastName =   $lastName;
-        $this->userType =       $userType;
     }
 }
