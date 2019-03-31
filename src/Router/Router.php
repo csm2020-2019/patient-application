@@ -4,6 +4,7 @@ namespace csm2020\PatientApp\Router;
 use csm2020\PatientApp\Authentication\Authentication;
 use csm2020\PatientApp\Controllers\PatientController;
 use csm2020\PatientApp\Controllers\RegimeController;
+use csm2020\PatientApp\Controllers\SportsCentreController;
 use csm2020\PatientApp\Models\User;
 
 class Router
@@ -110,6 +111,11 @@ class Router
                 }
                 break;
             case 'sportscentres':
+                $sportsCentreController = new SportsCentreController();
+                $this->responseData['sportscentres'] = $sportsCentreController->getAllSportsCentres();
+                if ($this->responseData['sportscentres'] === null) {
+                    return $this->error(self::UNRECOGNISED_COMMAND, $tokenData);
+                }
                 break;
             default:
                 return $this->error(self::UNRECOGNISED_COMMAND, $tokenData);
