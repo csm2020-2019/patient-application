@@ -29,11 +29,6 @@ class PatientController
         if (!$this->validateAddress([$address1, $address2, $town, $postcode])) {
             return null;
         }
-        if ($address2) {
-            $address2 = "{$address2},";
-        } else {
-            $address2 = '';
-        }
         $address = "${address1}, ${address2} ${town}, ${postcode}";
 
         $patient = Patient::getPatientByUserId($uid);
@@ -48,9 +43,6 @@ class PatientController
 
     private function validateAddress(array $components)
     {
-        if ($components[1] === null) {
-            array_pop($components[1]); // Address 2, which is optional
-        }
         foreach ($components as $component) {
             if ($component === null)  {
                 return false;

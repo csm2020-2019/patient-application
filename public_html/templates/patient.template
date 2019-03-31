@@ -41,7 +41,7 @@
     </div>
     <div class="form-group">
         <label for="address-2">Address #2:</label>
-        <input type="text" id="address-2" name="address-2" class="form-control" placeholder="i.e. Penglais">
+        <input type="text" id="address-2" name="address-2" class="form-control" placeholder="i.e. Penglais" required>
     </div>
     <div class="form-group">
         <label for="town">Town / City:</label>
