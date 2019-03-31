@@ -1,0 +1,45 @@
+<h1 class="h2">Sport Centres</h1>
+<p>Sports Centres that support the current Diabetes Assistant programme are displayed here.</p>
+<% if (sportscentres.length === 0) { %>
+<p>
+    <strong>
+        It looks like there are currently no sport centres on the programme, or their data is missing or damaged.
+    </strong>
+</p>
+<% } else { %>
+<table class="table table-responsive table-striped">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Address</th>
+        <th>Current Availability</th>
+        <th>Google Maps</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% for (let i = 0; i < sportscentres.length; i++) { %>
+    <tr>
+        <td><%= sportscentres[i].sportsCenterName %></td>
+        <td>
+            <a href="https://www.google.co.uk/maps/search/<%= sportscentres[i].sportsCenterAddress %>" target="_blank">
+                <address><%= sportscentres[i].sportsCenterAddress %></address>
+            </a>
+        </td>
+        <% if (parseInt(sportscentres[i].sportsCenterAvailability) === 1) { %>
+        <td><em>Available!</em></td>
+        <td>
+            <a href="https://www.google.co.uk/maps/search/<%= sportscentres[i].sportsCenterAddress %>"
+               class="btn btn-primary btn-sm" target="_blank">
+                Directions
+            </a>
+        </td>
+        <% } else { %>
+        <td><mark>Unavailable</mark></td>
+        <td><a href="" class="btn btn-primary btn-sm disabled">Unavailable</a></td>
+        <% } %>
+    </tr>
+    <% } %>
+    </tbody>
+</table>
+<% } %>
+

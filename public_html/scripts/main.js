@@ -131,6 +131,21 @@
 
     // Sports Centres Page
     this.get('#/sportscentres', function (context) {
+      $.ajax({
+        type: "POST",
+        url: API,
+        data: {
+          token: Cookies.get('token'),
+          request: 'sportscentres'
+        },
+        success: function(data) {
+          let formattedData = jQuery.parseJSON(JSON.stringify(data));
+          context.partial('templates/sportscentres.template', {sportscentres: formattedData.sportscentres}).swap();
+        },
+        error: function(data) {
+          printError(jQuery.parseJSON(JSON.stringify(data)));
+        }
+      });
     });
 
     // Patient Address Form
