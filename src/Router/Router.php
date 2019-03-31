@@ -2,6 +2,7 @@
 namespace csm2020\PatientApp\Router;
 
 use csm2020\PatientApp\Authentication\Authentication;
+use csm2020\PatientApp\Controllers\FeedbackController;
 use csm2020\PatientApp\Controllers\PatientController;
 use csm2020\PatientApp\Controllers\RegimeController;
 use csm2020\PatientApp\Controllers\SportsCentreController;
@@ -115,6 +116,12 @@ class Router
                 $this->responseData['sportscentres'] = $sportsCentreController->getAllSportsCentres();
                 if ($this->responseData['sportscentres'] === null) {
                     return $this->error(self::UNRECOGNISED_COMMAND, $tokenData);
+                }
+                break;
+            case 'feedback':
+                $feedbackController = new FeedbackController();
+                if (!$feedbackController->feedback($_POST['feedback'], $_POST['email'])) {
+                    return $this->error(self::SUBMISSION_FAILURE, $tokenData);
                 }
                 break;
             default:

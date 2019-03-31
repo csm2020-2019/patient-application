@@ -218,7 +218,7 @@
           token: Cookies.get('token'),
           request: 'feedback',
           email: $('#email').val(),
-          feedback: $('#feedback-form').val()
+          feedback: $('#feedback').val()
         },
         success: function() {
           printSuccess('Feedback submitted successfully!');
