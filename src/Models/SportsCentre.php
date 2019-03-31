@@ -93,19 +93,11 @@ class SportsCentre
         if (!$pid) {
             return null;
         }
-        $scid = $this->getId();
+        // $scid = $this->getId();
         $db = Database::getDatabase();
 
         try {
-            $stmt = $db->prepare('SELECT * FROM sc_appointments WHERE patient_id = :pid');
-            $stmt->bindParam(':pid', $pid);
-            $stmt->execute();
-
-            $appointment = $stmt->fetch(PDO::FETCH_ASSOC);
-            if (!$appointment) {
-                return true;
-            }
-            $stmt = $db->prepare('DELETE * FROM sc_appointments WHERE patient_id = :pid');
+            $stmt = $db->prepare('DELETE FROM sc_appointments WHERE patient_id = :pid');
             $stmt->bindParam(':pid', $pid);
             $stmt->execute();
             return true;
@@ -119,12 +111,14 @@ class SportsCentre
         if (!$pid) {
             return null;
         }
+        $id = null;
         $scid = $this->getId();
 
         $db = Database::getDatabase();
         try {
             $stmt = $db->prepare(
-                'INSERT INTO sc_appointments (sc_appt_id, sc_id, patient_id) VALUES (NULL, :scid, :pid)');
+                'INSERT INTO sc_appointments (sc_appt_id, sc_id, patient_id) VALUES (:id, :scid, :pid)');
+            $stmt->bindParam(':id', $id);
             $stmt->bindParam(':scid', $scid);
             $stmt->bindParam(':pid', $pid);
             $stmt->execute();

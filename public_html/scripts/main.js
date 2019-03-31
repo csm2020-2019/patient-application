@@ -164,6 +164,7 @@
         },
         success: function (data) {
           printSuccess();
+          location.reload();
         },
         error: function (data) {
           printError(jQuery.parseJSON(JSON.stringify(data)));
@@ -182,8 +183,8 @@
           email: $('#email-address').val()
         },
         success: function (data) {
-          printSuccess();
           app.refresh();
+          printSuccess();
         },
         error: function (data) {
           printError(jQuery.parseJSON(JSON.stringify(data)))
@@ -221,11 +222,10 @@
           request: 'appointment',
           appointment: id
         },
-        success: function(data) {
+        success: function() {
           printSuccess('Sports Centre re-assigned!');
-          let formattedData = jQuery.parseJSON(JSON.stringify(data));
-          context.partial('templates/sportscentres.template', {sportscentres: formattedData.sportscentres,
-            appointment: formattedData.appointment}).swap();
+          context.redirect('#/sportscentres');
+          location.reload();
         },
         error: function(data) {
           printError(jQuery.parseJSON(JSON.stringify(data)))
