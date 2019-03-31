@@ -54,7 +54,7 @@
         }
         // Logged in
         init =      true;
-        expiry =    new Date(Cookies.get('expiry'));
+        //expiry =    new Date(Cookies.get('expiry'));
         token =     Cookies.get('token');
       }
       // Expiry check
