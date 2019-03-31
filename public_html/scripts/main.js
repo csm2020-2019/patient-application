@@ -223,9 +223,9 @@
           appointment: id
         },
         success: function() {
-          printSuccess('Sports Centre re-assigned!');
           context.redirect('#/sportscentres');
           location.reload();
+          printSuccess('Sports Centre re-assigned!');
         },
         error: function(data) {
           printError(jQuery.parseJSON(JSON.stringify(data)))
