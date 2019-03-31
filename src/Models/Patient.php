@@ -151,9 +151,10 @@ class Patient
 
     public function getAppointment()
     {
+        $pid = $this->getPatientId();
         $db = Database::getDatabase();
         $stmt = $db->prepare('SELECT * FROM sc_appointments WHERE patient_id = :pid LIMIT 1');
-        $stmt->bindParam(':pid', $this->getPatientId());
+        $stmt->bindParam(':pid', $pid);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!$result) {

@@ -140,7 +140,8 @@
         },
         success: function(data) {
           let formattedData = jQuery.parseJSON(JSON.stringify(data));
-          context.partial('templates/sportscentres.template', {sportscentres: formattedData.sportscentres}).swap();
+          context.partial('templates/sportscentres.template', {sportscentres: formattedData.sportscentres,
+            appointment: formattedData.appointment}).swap();
         },
         error: function(data) {
           printError(jQuery.parseJSON(JSON.stringify(data)));
@@ -204,6 +205,29 @@
           printSuccess();
         },
         error: function (data) {
+          printError(jQuery.parseJSON(JSON.stringify(data)))
+        }
+      });
+    });
+
+    // Sports Centre 'Appointment' assignment
+    this.post('#/appointment/:id', function(context) {
+      let id = this.params['id'];
+      $.ajax({
+        type: "POST",
+        url: API,
+        data: {
+          token: Cookies.get('token'),
+          request: 'appointment',
+          appointment: id
+        },
+        success: function(data) {
+          printSuccess('Sports Centre re-assigned!');
+          let formattedData = jQuery.parseJSON(JSON.stringify(data));
+          context.partial('templates/sportscentres.template', {sportscentres: formattedData.sportscentres,
+            appointment: formattedData.appointment}).swap();
+        },
+        error: function(data) {
           printError(jQuery.parseJSON(JSON.stringify(data)))
         }
       });

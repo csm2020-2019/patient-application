@@ -124,7 +124,7 @@ class Router
                 break;
             case 'appointment':
                 $sportsCentreController = new SportsCentreController();
-                if (!$sportsCentreController->setSportsCentre($this->user->getUserId(), $_POST['scid'])) {
+                if (!$sportsCentreController->setSportsCentre($this->user->getUserId(), $_POST['appointment'])) {
                     return $this->error(self::SUBMISSION_FAILURE, $tokenData);
                 }
                 break;

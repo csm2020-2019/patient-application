@@ -14,6 +14,7 @@
         <th>Address</th>
         <th>Current Availability</th>
         <th>Google Maps</th>
+        <th>Centre Preference</th>
     </tr>
     </thead>
     <tbody>
@@ -33,9 +34,25 @@
                 Directions
             </a>
         </td>
+        <td>
+        <form method="POST" action="#/appointment/<%= sportscentres[i].sportsCenterId %>">
+            <% if (sportscentres[i].sportsCenterId === appointment.sc_id) { %>
+                <input type="submit" class="btn btn-primary btn-sm" value="Assigned" disabled>
+                <!-- <a href="#/appointment/<%= sportscentres[i].sportsCenterId %>" class="btn btn-primary btn-sm disabled">Assigned</a> -->
+            <% } else { %>
+                <input type="submit" class="btn btn-primary btn-sm" value="Assign">
+                <!-- <a href="#/appointment/<%= sportscentres[i].sportsCenterId %>" class="btn btn-primary btn-sm">Assign</a> -->
+            <% } %>
+        </form>
+        </td>
         <% } else { %>
-        <td><mark>Unavailable</mark></td>
-        <td><a href="" class="btn btn-primary btn-sm disabled">Unavailable</a></td>
+            <td><mark>Unavailable</mark></td>
+            <td><a href="" class="btn btn-primary btn-sm disabled">Unavailable</a></td>
+            <td>
+                <form method="POST" action="#/appointment/<%= sportscentres[i].sportsCenterId %>">
+                    <input type="submit" class="btn btn-primary btn-sm" value="Unavailable" disabled>
+                </form>
+            </td>
         <% } %>
     </tr>
     <% } %>
