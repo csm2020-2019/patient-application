@@ -118,6 +118,12 @@ class Router
                     return $this->error(self::UNRECOGNISED_COMMAND, $tokenData);
                 }
                 break;
+            case 'appointment':
+                $sportsCentreController = new SportsCentreController();
+                if (!$sportsCentreController->setSportsCentre($this->user->getUserId(), $_POST['scid'])) {
+                    return $this->error(self::SUBMISSION_FAILURE, $tokenData);
+                }
+                break;
             case 'feedback':
                 $feedbackController = new FeedbackController();
                 if (!$feedbackController->feedback($_POST['feedback'], $_POST['email'])) {

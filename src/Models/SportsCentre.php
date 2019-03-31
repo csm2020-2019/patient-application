@@ -56,17 +56,13 @@ class SportsCentre
         $db = Database::getDatabase();
         try {
             $stmt = $db->prepare('SELECT * FROM sports_center WHERE sportsCenterId = :scid LIMIT 1');
-            $stmt->bindParam(':pid', $pid);
+            $stmt->bindParam(':scid', $scid);
             $stmt->execute();
-            $centres = $stmt->fetch(PDO::FETCH_ASSOC);
-            if (!$centres) {
+            $centre = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (!$centre) {
                 return [];
             }
-            $builtCentres = [];
-            foreach($centres as $centre) {
-                array_push($builtCentres, self::factory($centre));
-            }
-            return $builtCentres;
+            return self::factory($centre);
         } catch (PDOException $e) {
             return null;
         }
@@ -87,6 +83,52 @@ class SportsCentre
                 array_push($builtCentres, self::factory($centre));
             }
             return $builtCentres;
+        } catch (PDOException $e) {
+            return null;
+        }
+    }
+
+    public function removeExistingAppointments($pid)
+    {
+        if (!$pid) {
+            return null;
+        }
+        $scid = $this->getId();
+        $db = Database::getDatabase();
+
+        try {
+            $stmt = $db->prepare('SELECT * FROM sc_appointments WHERE patient_id = :pid');
+            $stmt->bindParam(':pid', $pid);
+            $stmt->execute();
+
+            $appointment = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (!$appointment) {
+                return true;
+            }
+            $stmt = $db->prepare('DELETE * FROM sc_appointments WHERE patient_id = :pid');
+            $stmt->bindParam(':pid', $pid);
+            $stmt->execute();
+            return true;
+        } catch (PDOException $e) {
+            return null;
+        }
+    }
+
+    public function setAppointment($pid)
+    {
+        if (!$pid) {
+            return null;
+        }
+        $scid = $this->getId();
+
+        $db = Database::getDatabase();
+        try {
+            $stmt = $db->prepare(
+                'INSERT INTO sc_appointments (sc_appt_id, sc_id, patient_id) VALUES (NULL, :scid, :pid)');
+            $stmt->bindParam(':scid', $scid);
+            $stmt->bindParam(':pid', $pid);
+            $stmt->execute();
+            return true;
         } catch (PDOException $e) {
             return null;
         }
