@@ -107,5 +107,11 @@ class PatientController
         }
         return null;
     }
+
+    public function getAppointment($uid)
+    {
+        $patient = Patient::getPatientByUserId($uid);
+        return $patient->getAppointment();
+    }
 }
 

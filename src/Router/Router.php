@@ -6,6 +6,7 @@ use csm2020\PatientApp\Controllers\FeedbackController;
 use csm2020\PatientApp\Controllers\PatientController;
 use csm2020\PatientApp\Controllers\RegimeController;
 use csm2020\PatientApp\Controllers\SportsCentreController;
+use csm2020\PatientApp\Models\Patient;
 use csm2020\PatientApp\Models\User;
 
 class Router
@@ -113,8 +114,11 @@ class Router
                 break;
             case 'sportscentres':
                 $sportsCentreController = new SportsCentreController();
+                $patientController = new PatientController();
+
                 $this->responseData['sportscentres'] = $sportsCentreController->getAllSportsCentres();
-                if ($this->responseData['sportscentres'] === null) {
+                $this->responseData['appointment'] = $patientController->getAppointment($this->user->getUserId());
+                if ($this->responseData['sportscentres'] === null || $this->responseData['sportscentres'] === null) {
                     return $this->error(self::UNRECOGNISED_COMMAND, $tokenData);
                 }
                 break;
