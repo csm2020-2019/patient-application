@@ -201,8 +201,27 @@
           subscription: $('#checkbox').is(":checked")
         },
         success: function (data) {
-          context.log(data);
           printSuccess();
+        },
+        error: function (data) {
+          printError(jQuery.parseJSON(JSON.stringify(data)))
+        }
+      });
+    });
+
+    // Patient Email Subscription Form
+    this.post('#/feedback', function() {
+      $.ajax({
+        type: "POST",
+        url: API,
+        data: {
+          token: Cookies.get('token'),
+          request: 'feedback',
+          email: $('#email').val(),
+          feedback: $('#feedback-form').val()
+        },
+        success: function() {
+          printSuccess('Feedback submitted successfully!');
         },
         error: function (data) {
           printError(jQuery.parseJSON(JSON.stringify(data)))

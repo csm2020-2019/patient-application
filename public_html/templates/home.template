@@ -1,7 +1,39 @@
-<h1 class="h2">Hello World</h1>
+<h1 class="h2">Welcome!</h1>
 <p>
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean cursus, orci a tincidunt fringilla, metus erat interdum leo, ac pellentesque augue odio eget tortor. Duis non mauris nec mi dignissim rhoncus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus mattis nunc a commodo scelerisque. Praesent ultrices commodo enim ac rutrum. Etiam sit amet tincidunt ex. Quisque arcu sapien, feugiat id accumsan ac, maximus id justo. Curabitur lacinia dictum eros, eget commodo mauris. Nunc laoreet dapibus condimentum. Suspendisse consequat et dui pretium congue. Aenean scelerisque nibh sit amet egestas convallis. Vestibulum vulputate ante ac massa imperdiet, vitae varius orci pellentesque. Nulla vel est sed nulla interdum consequat laoreet at magna.
+    Welcome to the latest version of the Diabetes Assistant web app, a tool to help you keep track of your exercise
+    regimes, current trials, local participating sports centres, and other information that your GP and any referred
+    Rehabilitation Doctors might have on record.
+</p>
+<hr>
+<h3>Feedback Form</h3>
+<p>
+    This program is still in its infancy, so we'd love to have your feedback. We're especially keen to hear about how
+    it looks and behaves on your mobile phone, and whether you run into any weird errors or behaviours!
 </p>
 <p>
-    Morbi eleifend augue nisl, ut accumsan mauris malesuada id. Aliquam imperdiet ante eu sem pellentesque, non imperdiet est pellentesque. Vestibulum neque nunc, euismod in metus ultricies, rhoncus consequat magna. Maecenas in erat enim. Sed quis volutpat sem. Curabitur semper a felis eu iaculis. Nam eu semper magna. Fusce quam libero, efficitur at lectus quis, sollicitudin fermentum purus. Phasellus consectetur justo ut magna ultricies sagittis. Quisque bibendum eleifend libero id tempor. Sed quis gravida nisi.
+    You can contact us using the anonymous form below, or drop us an email at <a href="mailto:ole4@aber.ac.uk">
+    ole4@aber.ac.uk</a>. Once again, <strong>thank you for using the Diabetes Assistant app!</strong>
 </p>
+<form id="feedback-form" name="feedback-form" method="POST" action="#/feedback">
+    <div class="form-group">
+        <label for="email">Email: <em>(Optional)</em></label>
+        <input type="email" id="email" name="email" class="form-control"
+               placeholder="If you'd like a response, provide an email address!">
+    </div>
+    <div class="form-group">
+        <label for="feedback">Feedback: </label>
+        <textarea id="feedback" name="feedback" class="form-control"
+                  placeholder="Your feedback is valuable to us." minlength="10" maxlength="500" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit Feedback</button>
+</form>
+<hr>
+<h3>Known Bugs <small>Aimed to be fixed in the next release!</small></h3>
+<ul>
+    <li>
+        Sometimes the application will display <code>Unauthorised</code> errors for a few seconds after starting,
+        but the problem goes away after a short while.
+    </li>
+    <li>When resizing the screen, the main menu may superimpose over the home link before becoming a sandwich menu icon.</li>
+    <li>Some success or error info panels will sometimes not go away without being manually dismissed.</li>
+</ul>
