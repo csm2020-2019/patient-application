@@ -4,6 +4,7 @@ namespace csm2020\PatientApp\Config;
 /**
  * Class Config
  * @package csm2020\PatientApp\Config
+ * @author Oliver Earl <ole4@aber.ac.uk>
  */
 class Config
 {
@@ -11,6 +12,14 @@ class Config
 
     private static $config;
 
+    /**
+     * Config constructor
+     * When this singleton is instantiated, it will pull the program configuration out of a settings.ini file.
+     *
+     * Without this file, the program won't run. No ifs, no buts.
+     *
+     * TODO: Refactor this outside of the constructor, and into a separate private method.
+     */
     private function __construct()
     {
         if (!file_exists(self::CONFIG_LOCATION)) {
@@ -28,8 +37,13 @@ class Config
 
     private function __clone(){}
 
-    // TODO: Better error handling in this entire method
-    public static function getConfig(): Array
+    /**
+     * Get Config Method
+     * @return array
+     *
+     * Returns the Configuration array from the INI file. If anything goes wrong during this process, the program dies.
+     */
+    public static function getConfig(): array
     {
         if (!isset(self::$config)) {
             $configArray = [];
