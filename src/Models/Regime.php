@@ -24,7 +24,7 @@ class Regime
     /**
      * @var
      */
-    private $gpId;
+    private $rdId;
     /**
      * @var
      */
@@ -42,16 +42,16 @@ class Regime
      * Regime constructor.
      * @param $regimeId
      * @param $patientId
-     * @param $gpId
+     * @param $rd
      * @param $startDate
      * @param $endDate
      * @param $frequency
      */
-    private function __construct($regimeId, $patientId, $gpId, $startDate, $endDate, $frequency)
+    private function __construct($regimeId, $patientId, $rd, $startDate, $endDate, $frequency)
     {
         $this->regimeId = $regimeId;
         $this->patientId = $patientId;
-        $this->gpId = $gpId;
+        $this->rdId = $rd;
         $this->startDate = $startDate;
         $this->endDate = $endDate;
         $this->frequency = $frequency;
@@ -68,10 +68,13 @@ class Regime
      */
     public static function factory(array $ingredients)
     {
+        // regime id 1
+        // patient id 30
+        // rd id 3
         $regime = new Regime(
             $ingredients['regime_id'],
             $ingredients['patient_id'],
-            $ingredients['gp_id'],
+            $ingredients['rd_id'],
             $ingredients['start_date'],
             $ingredients['end_date'],
             $ingredients['frequency']
@@ -95,7 +98,6 @@ class Regime
         if (!$rid || !$pid) {
             return null;
         }
-
         $db = Database::getDatabase();
         try {
             $stmt = $db->prepare('SELECT * FROM exercise_regimes WHERE regime_id = :rid AND patient_id = :pid LIMIT 1');
@@ -155,7 +157,7 @@ class Regime
         return [
             'regime_id' =>   $this->getRegimeId(),
             'patient_id' =>  $this->getPatientId(),
-            'gp_id' =>       $this->getGpId(),
+            'rd_id' =>       $this->getRdId(),
             'start_date' =>  $this->getStartDate(),
             'end_date' =>    $this->getEndDate(),
             'frequency' =>   $this->getFrequency()
@@ -197,17 +199,17 @@ class Regime
     /**
      * @return mixed
      */
-    public function getGpId()
+    public function getRdId()
     {
-        return $this->gpId;
+        return $this->rdId;
     }
 
     /**
-     * @param mixed $gpId
+     * @param mixed $rdId
      */
-    public function setGpId($gpId)
+    public function setRdId($rdId)
     {
-        $this->gpId = $gpId;
+        $this->rdId = $rdId;
     }
 
     /**

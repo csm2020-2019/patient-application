@@ -24,7 +24,6 @@
         <th>Exercise Duration</th>
         <th>Intensity <em>(Speed)</em></th>
         <th>Intensity <em>(Slope)</em></th>
-        <th>Completion Time</th>
     </tr>
     </thead>
     <tbody>
@@ -35,7 +34,6 @@
         <td><%= regime.trials[i].duration %></td>
         <td><%= regime.trials[i].intensity_speed %></td>
         <td><%= regime.trials[i].intensity_slope %></td>
-        <td><%= regime.trials[i].completed_time %></td>
     </tr>
     <% } %>
     </tbody>
