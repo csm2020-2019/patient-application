@@ -8,8 +8,14 @@
     let init = null;
     let token = null;
 
-    // Success Flash Helper Function
-    const printSuccess = function (success) {
+    /**
+     * Print Success Helper Function
+     * @author Oliver Earl <ole4@aber.ac.uk>
+     * @param success
+     *
+     * Simply prints success information to the DOM using a Bootstrap success alert.
+     */
+    const printSuccess = function(success) {
       if (!success) {
         success = 'Changes saved successfully!';
       }
@@ -24,8 +30,14 @@
       window.scrollTo(0,0);
     };
 
-    // Error Flash Helper Function
-    const printError = function (error) {
+    /**
+     * Print Error Helper Function
+     * @author Oliver Earl <ole4@aber.ac.uk>
+     * @param error
+     *
+     * Simply prints error information to the DOM using a Bootstrap error alert.
+     */
+    const printError = function(error) {
       let fError = error.responseJSON.message.toString();
       $('#errors').append(
         `<div id="error" class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -37,12 +49,27 @@
       window.scrollTo(0,0);
     };
 
-    // Error Clearing Middleware
-    this.before('#/', function () {
+    /**
+     * Dialogue Middleware
+     * @author Oliver Earl <ole4@aber.ac.uk>
+     *
+     * Deletes Bootstrap errors and success dialogues on each route change.
+     */
+    this.before('#/', function() {
       $('#errors').empty();
     });
 
-    // Authentication Middleware
+    /**
+     * Authentication Middleware
+     * @author Oliver Earl <ole4@aber.ac.uk>
+     *
+     * This middleware serves two main functions - whilst ultimately the backend API will prohibit data from being
+     * accessed or requests being made without a valid, or expired, token, for a smooth end-user experience it's a good
+     * idea to expire the user session and delete cookies, forcing a logout, once two hours from the program initiating
+     * has elapsed.
+     *
+     * This function also ensures the program can't be navigated to without a valid login cookie.
+     */
     this.before('#/', function() {
       // The server will enforce token expiry. This just helps keep things clean.
       if (!init) {
@@ -64,12 +91,22 @@
       }
     });
 
-    // Root
-    this.get('#/', function (context) {
+    /**
+     * Root Route
+     * @author Oliver Earl <ole4@aber.ac.uk>
+     *
+     * Loads the homepage of the web application.
+     */
+    this.get('#/', function(context) {
       context.partial('templates/home.template').swap();
     });
 
-    // Patient Page
+    /**
+     * Patient Route
+     * @author Oliver Earl <ole4@aber.ac.uk>
+     *
+     * Displays the patient information, both that which can be edited, and that which is read-only.
+     */
     this.get('#/patient', function (context) {
       $.ajax({
         type: "POST",
@@ -78,18 +115,23 @@
           token: Cookies.get('token'),
           request: 'patient'
         },
-        success: function (data) {
+        success: function(data) {
           let formattedData = jQuery.parseJSON(JSON.stringify(data));
           context.partial('templates/patient.template', {patient: formattedData.patient}).swap();
         },
-        error: function (data) {
+        error: function(data) {
           printError(jQuery.parseJSON(JSON.stringify(data)));
         }
       });
     });
 
-    // Regimes Page
-    this.get('#/regimes', function (context) {
+    /**
+     * Regimes Route
+     * @author Oliver Earl <ole4@aber.ac.uk>
+     *
+     * Displays the current user's assigned exercise regimes.
+     */
+    this.get('#/regimes', function(context) {
       $.ajax ({
         type: "POST",
         url: API,
@@ -97,17 +139,24 @@
           token: Cookies.get('token'),
           request: 'regimes'
         },
-        success: function (data) {
+        success: function(data) {
           let formattedData = jQuery.parseJSON(JSON.stringify(data));
           context.partial('templates/regimes.template', {regimes: formattedData.regimes}).swap();
         },
-        error: function (data) {
+        error: function(data) {
           printError(jQuery.parseJSON(JSON.stringify(data)));
         }
       });
     });
 
-    // Each individual regime
+    /**
+     * Specific Regime / Trials Route
+     * @author Oliver Earl <ole4@aber.ac.uk>
+     *
+     * Displays specific information to a specific regime, identified by an ID (rid) parameter. The information
+     * returned from the API will also contain a subarray of trials, if any, and the GP who assigned the patient to
+     * this specific regime.
+     */
     this.get('#/regimes/:id', function(context) {
       let id = this.params['id'];
       $.ajax({
@@ -123,13 +172,19 @@
           context.partial('templates/regime.template',
             {regime: formattedData.regime, trials: formattedData.trials}).swap();
         },
-        error: function (data) {
+        error: function(data) {
           printError(jQuery.parseJSON(JSON.stringify(data)));
         }
       });
     });
 
-    // Sports Centres Page
+    /**
+     * Sports Centres Route
+     * @author Oliver Earl <ole4@aber.ac.uk>
+     *
+     * Displays all available sports centres, including the user's current preferred (assigned, or 'appointed') sports
+     * centre.
+     */
     this.get('#/sportscentres', function (context) {
       $.ajax({
         type: "POST",
@@ -149,8 +204,14 @@
       });
     });
 
-    // Patient Address Form
-    this.post('#/patient/address', function (context) {
+    /**
+     * Patient Address Route
+     * @author Oliver Earl <ole4@aber.ac.uk>
+     *
+     * Allows the user to update their address - taking two address strings, a town or city, and a postcode. They are
+     * later concatenated together for storage as a single value.
+     */
+    this.post('#/patient/address', function() {
       $.ajax({
         type: "POST",
         url: API,
@@ -162,18 +223,24 @@
           town: $('#town').val(),
           postcode: $('#postcode').val()
         },
-        success: function (data) {
+        success: function() {
           printSuccess();
           location.reload();
         },
-        error: function (data) {
+        error: function(data) {
           printError(jQuery.parseJSON(JSON.stringify(data)));
         }
       });
     });
 
-    // Patient Email Form
-    this.post('#/patient/email', function (context) {
+    /**
+     * Patient Email Route
+     * @author Oliver Earl <ole4@aber.ac.uk>
+     *
+     * Allows the user to replace their email address on record. It's important to note that this is their patient
+     * email address - not their user one.
+     */
+    this.post('#/patient/email', function() {
       $.ajax({
         type: "POST",
         url: API,
@@ -182,18 +249,25 @@
           request: 'patient-email',
           email: $('#email-address').val()
         },
-        success: function (data) {
+        success: function() {
           app.refresh();
           printSuccess();
         },
-        error: function (data) {
+        error: function(data) {
           printError(jQuery.parseJSON(JSON.stringify(data)))
         }
       });
     });
 
-    // Patient Email Subscription Form
-    this.post('#/patient/subscription', function (context) {
+    /**
+     * Patient Email Subscription Route
+     * @author Oliver Earl <ole4@aber.ac.uk>
+     *
+     * Allows the patient to change their prescription status to the email subscription service. All this does, that
+     * the web-side of things needs to be aware of, is change the database. The backend doesn't fire off any emails
+     * itself.
+     */
+    this.post('#/patient/subscription', function() {
       $.ajax({
         type: "POST",
         url: API,
@@ -202,16 +276,26 @@
           request: 'patient-subscription',
           subscription: $('#checkbox').is(":checked")
         },
-        success: function (data) {
+        success: function() {
           printSuccess();
         },
-        error: function (data) {
+        error: function(data) {
           printError(jQuery.parseJSON(JSON.stringify(data)))
         }
       });
     });
 
-    // Sports Centre 'Appointment' assignment
+    /**
+     * Sports Centre Assignment Route
+     * @author Oliver Earl <ole4@aber.ac.uk>
+     *
+     * This route changes the patient's 'appointed' sports centre - referred to as their assigned or preferred sports
+     * centre in different areas. By assigning a patient to a specific sports centre, it will un-assign them from any
+     * other sports centre that they are formerly assigned to.
+     *
+     * Users can't be assigned to unavailable sports centres, but will in theory, continue to be assigned to a sports
+     * centre even if it changes its status to unavailable, unless this is changed by the Java application.
+     */
     this.post('#/appointment/:id', function(context) {
       let id = this.params['id'];
       $.ajax({
@@ -233,7 +317,12 @@
       });
     });
 
-    // Patient Email Subscription Form
+    /**
+     * Feedback Route
+     * @author Oliver Earl <ole4@aber.ac.uk>
+     *
+     * Sends feedback to the backend, with an optional email address if the user wants a response.
+     */
     this.post('#/feedback', function() {
       $.ajax({
         type: "POST",
@@ -247,21 +336,27 @@
         success: function() {
           printSuccess('Feedback submitted successfully!');
         },
-        error: function (data) {
+        error: function(data) {
           printError(jQuery.parseJSON(JSON.stringify(data)))
         }
       });
     });
 
-    // Log Out
-    this.get('#/logout', function (context) {
+    /**
+     * Logout Route
+     * @author Oliver Earl <ole4@aber.ac.uk>
+     *
+     * Deletes cookies and refreshes the application, triggering the auth middleware, and forcing the user out of the
+     * app. Rudimentary, but it works!
+     */
+    this.get('#/logout', function() {
       Cookies.remove('token');
       Cookies.remove('expiry');
       this.redirect('#/');
     })
 
   });
-  $(function () {
+  $(function() {
     app.run('#/');
   });
 })(jQuery);
