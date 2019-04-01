@@ -5,6 +5,8 @@ ole4@aber.ac.uk
 
 A live version of this application is running on my web space, for your convenience:
 http://users.aber.ac.uk/ole4/index.html
+Username: wibble
+Password: something
 
 License: MIT
 Libraries:
