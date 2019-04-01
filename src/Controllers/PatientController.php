@@ -41,7 +41,7 @@ class PatientController
         return null;
     }
 
-    private function validateAddress(array $components)
+    public function validateAddress(array $components)
     {
         foreach ($components as $component) {
             if ($component === null)  {

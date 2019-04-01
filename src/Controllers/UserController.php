@@ -8,10 +8,7 @@ use csm2020\PatientApp\Models\User;
 class UserController
 {
 
-    public function __construct()
-    {
-
-    }
+    public function __construct() {}
 
     public function register($username, $email, $password, $firstName, $lastName, $pid)
     {
