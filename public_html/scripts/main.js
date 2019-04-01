@@ -3,7 +3,6 @@
   let app = $.sammy('#main', function () {
     // Plugins
     this.use('Template');
-
     const API = 'api.php';
     let init = null;
     let token = null;
