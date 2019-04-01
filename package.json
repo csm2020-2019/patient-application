@@ -2,7 +2,7 @@
   "name": "patient-application",
   "version": "1.0.0",
   "description": "Web-based patient application",
-  "main": "index.js",
+  "main": "main.js",
   "directories": {
     "test": "tests"
   },
