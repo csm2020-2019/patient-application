@@ -95,23 +95,23 @@ class UserController
     }
 
     /**
-     * Get GP Details by ID Method
-     * @param $gpId
+     * Get RD Details by ID
+     * @param $rdid
      * @return array|null
      *
-     * When returning Trials information, information about the GP who assigned the exercise regime is also returned. It
-     * would be bad to return all of the GP information (which is just a user object with a userType of GP) as it
+     * When returning Trials information, information about the RD who assigned the exercise regime is also returned. It
+     * would be bad to return all of the RD information (which is just a user object with a userType of RD) as it
      * includes the password. Instead, the first and last names of the doctor and their email address are returned so
      * that the user can email them, or at least have their full name available to them. Should anything go wrong
-     * at the database level, or the provided user not actually be a GP (just in case) then null is returned.
+     * at the database level, or the provided user not actually be a RD (just in case) then null is returned.
      */
-    public function getGPDetailsById($gpId)
+    public function getRDDetailsById($rdid)
     {
-        $user = User::getUserById($gpId);
+        $user = User::getUserById($rdid);
         if (!$user) {
             return null;
         }
-        if ($user->getUserType() === 'gp') {
+        if ($user->getUserType() === 'rd') {
             return [
                 'gp_first_name' =>  $user->getUserFirstName(),
                 'gp_last_name' =>   $user->getUserLastName(),

@@ -84,6 +84,7 @@ class Router
      */
     public function route()
     {
+        // Uncomment me if you want to get your debug on
 //        if (!isset($_POST['token']) && isset($_GET['token'])) {
 //            $_POST = $_GET;
 //        }

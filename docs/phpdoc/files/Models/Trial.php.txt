@@ -36,10 +36,6 @@ class Trial
      * @var
      */
     private $intensitySlope;
-    /**
-     * @var
-     */
-    private $completedTime;
 
     /**
      * Trial constructor.
@@ -49,19 +45,15 @@ class Trial
      * @param $duration
      * @param $intensitySpeed
      * @param $intensitySlope
-     * @param $completedTime
      */
-    private function __construct($trialId, $regimeId, $type, $duration, $intensitySpeed, $intensitySlope,
-                                 $completedTime)
+    private function __construct($trialId, $regimeId, $type, $duration, $intensitySpeed, $intensitySlope)
     {
         $this->trialId = $trialId;
         $this->regimeId = $regimeId;
         $this->type = $type;
         $this->duration = $duration;
         $this->intensitySpeed = $intensitySpeed;
-        $this->intensitySlope = $intensitySlope;
-        $this->completedTime = $completedTime;
-    }
+        $this->intensitySlope = $intensitySlope;}
 
     /**
      *
@@ -80,8 +72,7 @@ class Trial
             $ingredients['type'],
             $ingredients['duration'],
             $ingredients['intensity_speed'],
-            $ingredients['intensity_slope'],
-            $ingredients['completed_time']
+            $ingredients['intensity_slope']
         );
         return $trial;
     }
@@ -98,7 +89,6 @@ class Trial
             'duration'          => $this->getDuration(),
             'intensity_speed'   => $this->getIntensitySpeed(),
             'intensity_slope'   => $this->getIntensitySlope(),
-            'completed_time'    => $this->getCompletedTime()
         ];
     }
 

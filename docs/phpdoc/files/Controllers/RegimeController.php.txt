@@ -67,14 +67,13 @@ class RegimeController
                 }
                 $dataArray = $regime->toAssoc();
                 $dataArray['trials'] = [];
-                $dataArray['gp'] = [];
+                $dataArray['rd'] = [];
 
                 $trialsController = new TrialsController();
                 $dataArray['trials'] = $trialsController->getTrialsByRegimeId($rid);
 
                 $userController = new UserController();
-                $dataArray['gp'] = $userController->getGPDetailsById($regime->getGpId());
-
+                $dataArray['gp'] = $userController->getRDDetailsById($regime->getRdId());
                 return $dataArray;
             }
         }
