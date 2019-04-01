@@ -13,6 +13,9 @@ use csm2020\PatientApp\Models\User;
 class UserController
 {
 
+    /**
+     * UserController constructor.
+     */
     public function __construct() {}
 
     /** Register Method

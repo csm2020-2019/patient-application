@@ -6,16 +6,52 @@ use csm2020\PatientApp\Database\Database;
 use PDO;
 use PDOException;
 
+/**
+ * Class User
+ * @package csm2020\PatientApp\Models
+ * @author Oliver Earl <ole4@aber.ac.uk>
+ */
 class User
 {
+    /**
+     * @var
+     */
     private $userId;
+    /**
+     * @var
+     */
     private $username;
+    /**
+     * @var
+     */
     private $userPassword;
+    /**
+     * @var
+     */
     private $userEmail;
+    /**
+     * @var
+     */
     private $userFirstName;
+    /**
+     * @var
+     */
     private $userLastName;
+    /**
+     * @var
+     */
     private $userType;
 
+    /**
+     * User constructor.
+     * @param $uid
+     * @param $username
+     * @param $password
+     * @param $email
+     * @param $firstName
+     * @param $lastName
+     * @param $userType
+     */
     private function __construct($uid, $username, $password, $email, $firstName, $lastName, $userType)
     {
         $this->userId =         $uid;
@@ -27,8 +63,15 @@ class User
         $this->userType =       $userType;
     }
 
+    /**
+     *
+     */
     private function __clone() {}
 
+    /**
+     * @param $ingredients
+     * @return User
+     */
     public static function factory($ingredients)
     {
         $user = new User(
@@ -43,6 +86,14 @@ class User
             return $user;
     }
 
+    /**
+     * Get User By ID Method
+     * @param $uid
+     * @return User|null
+     *
+     * Another incredibly important method as it is used so frequently throughout the program. Retrieves a User object
+     * based on the provided user ID, which quite often is the user ID provided by the token. Null on fail.
+     */
     public static function getUserById($uid)
     {
         $db = Database::getDatabase();
@@ -61,6 +112,18 @@ class User
         return self::factory($ingredients);
     }
 
+    /**
+     * Register Method
+     * @param $ingredients
+     * @return string|null
+     *
+     * This is the second part of the register method found in the controller. The ingredients necessary for creating
+     * a user are forwarded to this method in an array, which is checked. An SQL query is constructed, as all
+     * sanitisation and validation have already been taken care of in the controller, and is executed. If successful,
+     * this method actually returns the autoincrement ID of the user it just created in the database, so that additional
+     * actions can take place in the controller - predominantly using that ID to finish up changes to the patient
+     * table. Null on fail.
+     */
     public static function register($ingredients)
     {
         if (!$ingredients) {
@@ -69,7 +132,8 @@ class User
         $db = Database::getDatabase();
         $userType = 'patient';
         try {
-            $stmt = $db->prepare('INSERT INTO user (username, userPassword, userEmail, userFirstName, userLastName, userType) VALUES (:username, :password, :email, :firstName, :lastName, :userType)');
+            $stmt = $db->prepare('INSERT INTO user (username, userPassword, userEmail, userFirstName, 
+userLastName, userType) VALUES (:username, :password, :email, :firstName, :lastName, :userType)');
             $stmt->bindParam(':username',   $ingredients['username']);
             $stmt->bindParam(':password',   $ingredients['password']);
             $stmt->bindParam(':email',      $ingredients['email']);
@@ -84,6 +148,9 @@ class User
         }
     }
 
+    /**
+     * @return array
+     */
     public function getDisplayableInfo()
     {
         return [

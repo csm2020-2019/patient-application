@@ -13,6 +13,9 @@ use csm2020\PatientApp\Models\Trial;
 class RegimeController
 {
 
+    /**
+     * RegimeController constructor.
+     */
     public function __construct() {}
 
     /**

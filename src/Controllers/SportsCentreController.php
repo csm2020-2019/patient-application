@@ -11,6 +11,9 @@ use csm2020\PatientApp\Models\SportsCentre;
  */
 class SportsCentreController
 {
+    /**
+     * SportsCentreController constructor.
+     */
     public function __construct() {}
 
     /**

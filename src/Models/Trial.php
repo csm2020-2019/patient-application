@@ -5,16 +5,52 @@ use csm2020\PatientApp\Database\Database;
 use PDO;
 use PDOException;
 
+/**
+ * Class Trial
+ * @package csm2020\PatientApp\Models
+ * @author Oliver Earl <ole4@aber.ac.uk>
+ */
 class Trial
 {
+    /**
+     * @var
+     */
     private $trialId;
+    /**
+     * @var
+     */
     private $regimeId;
+    /**
+     * @var
+     */
     private $type;
+    /**
+     * @var
+     */
     private $duration;
+    /**
+     * @var
+     */
     private $intensitySpeed;
+    /**
+     * @var
+     */
     private $intensitySlope;
+    /**
+     * @var
+     */
     private $completedTime;
 
+    /**
+     * Trial constructor.
+     * @param $trialId
+     * @param $regimeId
+     * @param $type
+     * @param $duration
+     * @param $intensitySpeed
+     * @param $intensitySlope
+     * @param $completedTime
+     */
     private function __construct($trialId, $regimeId, $type, $duration, $intensitySpeed, $intensitySlope,
                                  $completedTime)
     {
@@ -27,8 +63,15 @@ class Trial
         $this->completedTime = $completedTime;
     }
 
+    /**
+     *
+     */
     private function __clone() {}
 
+    /**
+     * @param array $ingredients
+     * @return Trial
+     */
     public static function factory(array $ingredients)
     {
         $trial = new Trial(
@@ -43,6 +86,9 @@ class Trial
         return $trial;
     }
 
+    /**
+     * @return array
+     */
     public function toAssoc()
     {
         return [
@@ -56,6 +102,14 @@ class Trial
         ];
     }
 
+    /**
+     * Get Trials By Regime ID Method
+     * @param $rid
+     * @return array|null
+     *
+     * Returns all trials containing a foreign key to the specified regime ID. If there aren't any, then it will return
+     * an empty array in any case, otherwise an associative array containing trial objects. Null on fail.
+     */
     public static function getTrialsByRegimeId($rid)
     {
         $rid = Database::sanitise($rid);

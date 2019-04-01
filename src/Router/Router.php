@@ -9,18 +9,51 @@ use csm2020\PatientApp\Controllers\SportsCentreController;
 use csm2020\PatientApp\Controllers\UserController;
 use csm2020\PatientApp\Models\User;
 
+/**
+ * Class Router
+ * @package csm2020\PatientApp\Router
+ * @author Oliver Earl <ole4@aber.ac.uk>
+ * @todo Repent for my sins
+ */
 class Router
 {
+    /**
+     * Invalid email provided
+     */
     const BAD_EMAIL =               'Invalid email submitted';
+    /**
+     * No command provided at all
+     */
     const NO_COMMAND =              'No command specified';
+    /**
+     * Something went wrong during the data submission process - usually a sanitisation problem
+     */
     const SUBMISSION_FAILURE =      'Data submission unsuccessful';
+    /**
+     * Unauthorised - usually no token or trying to access something that doesn't belong to the user
+     */
     const UNAUTHORISED =            'Unauthorised';
+    /**
+     * Something wrong with the user input
+     */
     const UNRECOGNISED_COMMAND =    'Unrecognised command specified';
 
+    /**
+     * @var Authentication
+     */
     private $auth;
+    /**
+     * @var array
+     */
     private $responseData = [];
+    /**
+     * @var null
+     */
     private $user;
 
+    /**
+     * Router constructor.
+     */
     public function __construct()
     {
         $this->auth = new Authentication();
@@ -28,6 +61,27 @@ class Router
         $this->user = null;
     }
 
+    /**
+     * Router Method
+     * @return false|string
+     * @throws \Exception
+     *
+     * The absolute behemoth function in the program, a monstrosity of epic proportions. It smells, but is the main
+     * reason why this program is written how it is. Because of the unique infrastructure the program is designed for
+     * where standard RESTful APIs are simply out of the question and routing has to be done without regard to HTTP
+     * method, and are simply specified as POST variables.
+     *
+     * Users logging in or registering are naturally without a token, so they are taken care of first. If the necessary
+     * POST variables aren't present indicating a user registering or logging in, a token is required before anything
+     * else is checked. And how are they checked? A gigantic switch statement. What else.
+     *
+     * Whilst messy and crude - it does work quite well. 'Routes' are effectively cases determined by the 'request'
+     * POST variable, as opposed to a path and HTTP method. Unusual but necessary in this case. Should everything go
+     * okay, data is added to an associative array which is eventually processed at the end into JSON and is printed
+     * to the screen - which is fine for AJAX queries. HTTP response headers are also determined throughout the program.
+     *
+     * TODO: This whole thing needs rewriting at some stage.
+     */
     public function route()
     {
 //        if (!isset($_POST['token']) && isset($_GET['token'])) {
@@ -157,17 +211,40 @@ class Router
         return $this->success($this->responseData, 200);
     }
 
+    /**
+     * Success Method
+     * @param array $data
+     * @param int $code
+     * @return false|string
+     *
+     * Sets the response code and then encodes all the data accumulated so far as JSON for printing.
+     */
     private function success(array $data, int $code = 200)
     {
         $this->setResponseCode($code);
         return json_encode($data);
     }
+
+    /**
+     * Error Method
+     * @param String $errorCode
+     * @param array|null $auth
+     * @return String
+     *
+     * Sets the HTTP response headers according to the error, and returns a standard JSON response for errors.
+     */
     private function error(String $errorCode, array $auth = null): String
     {
         $this->setResponseCode($errorCode);
         return json_encode(['status' => 'error', 'message' => $errorCode, 'auth' => $auth ?? null]);
     }
 
+    /**
+     * Set Response Code
+     * @param $code
+     *
+     * A simple switch statement that, depending on the error constant used, sets the HTTP response.
+     */
     private function setResponseCode($code)
     {
         $responseCode = 200; // OK is default

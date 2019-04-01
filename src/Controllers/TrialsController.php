@@ -10,6 +10,9 @@ use csm2020\PatientApp\Models\Trial;
  */
 class TrialsController
 {
+    /**
+     * TrialsController constructor.
+     */
     public function __construct() {}
 
     /**

@@ -7,20 +7,72 @@ use PDO;
 use PDOException;
 use PDOStatement;
 
+/**
+ * Class Patient
+ * @package csm2020\PatientApp\Models
+ * @author Oliver Earl <ole4@aber.ac.uk>
+ */
 class Patient
 {
+    /**
+     * @var null
+     */
     private $patientId;
+    /**
+     * @var null
+     */
     private $userId;
+    /**
+     * @var
+     */
     private $firstName;
+    /**
+     * @var
+     */
     private $lastName;
+    /**
+     * @var
+     */
     private $email;
+    /**
+     * @var
+     */
     private $dob;
+    /**
+     * @var
+     */
     private $address;
+    /**
+     * @var
+     */
     private $medicalHistory;
+    /**
+     * @var
+     */
     private $diagnosis;
+    /**
+     * @var
+     */
     private $prescriptions;
+    /**
+     * @var
+     */
     private $subscription;
 
+    /**
+     * Patient constructor.
+     * @param $firstName
+     * @param $lastName
+     * @param $email
+     * @param $dob
+     * @param $address
+     * @param $medicalHistory
+     * @param $diagnosis
+     * @param $prescriptions
+     * @param $subscription
+     * @param null $patientId
+     * @param null $userId
+     */
     private function __construct($firstName, $lastName, $email, $dob, $address, $medicalHistory, $diagnosis,
                                  $prescriptions, $subscription, $patientId = null, $userId = null)
     {
@@ -38,8 +90,16 @@ class Patient
         $this->patientId =      $patientId;
         $this->userId =         $userId;
     }
+
+    /**
+     *
+     */
     private function __clone() {}
 
+    /**
+     * @param array $ingredients
+     * @return Patient
+     */
     public static function factory(array $ingredients)
     {
         $patient = new Patient(
@@ -58,6 +118,13 @@ class Patient
         return $patient;
     }
 
+    /**
+     * Get Patient by Patient ID
+     * @param $pid
+     * @return Patient|null
+     *
+     * Returns a freshly instantiated patient object by searching by its patient ID. Null on failure.
+     */
     public static function getPatientByPatientId($pid)
     {
         $pid = Database::sanitise($pid);
@@ -75,6 +142,14 @@ class Patient
         }
     }
 
+    /**
+     * Get Patient by User ID
+     * @param $uid
+     * @return Patient|null
+     *
+     * An extremely important method as it allows for the effective conversion of a user ID into a patient ID by
+     * retrieving the patient with the affiliated user ID foreign key. Returns null on failure.
+     */
     public static function getPatientByUserId($uid)
     {
         $uid = Database::sanitise($uid);
@@ -92,6 +167,15 @@ class Patient
         }
     }
 
+    /**
+     * Get Patient Method
+     * @param PDOStatement $stmt
+     * @return Patient|null
+     *
+     * In order to reduce code duplication, both types of Get Patient by pid or uid will call this method to finish
+     * the rest of the query, passing its fully formed PDOStatement as a parameter. Returns the completed patient object
+     * or null if something goes wrong.
+     */
     private static function getPatient(PDOStatement $stmt)
     {
         $stmt->execute();
@@ -102,6 +186,13 @@ class Patient
         return self::factory($ingredients);
     }
 
+    /**
+     * Update Method
+     * @return bool|null
+     *
+     * Writes current changes to the patient object. For safety, it only saves data that is currently considered
+     * modifiable but could be opened up later. If a database error occurs, null is returned.
+     */
     public function update()
     {
         $db = Database::getDatabase();
@@ -131,6 +222,9 @@ class Patient
         return true;
     }
 
+    /**
+     * @return array
+     */
     public function displayable()
     {
         return [
@@ -143,6 +237,9 @@ class Patient
         ];
     }
 
+    /**
+     * @return array
+     */
     public function editable()
     {
         return [
@@ -152,6 +249,14 @@ class Patient
         ];
     }
 
+    /**
+     * Get Appointment Method
+     * @return array|mixed
+     *
+     * Returns the current patient's 'appointment' using the patient ID. This is their preferred sports centre.
+     *
+     * TODO: This probably isn't the right place for this method, it's just here historically. Refactor.
+     */
     public function getAppointment()
     {
         $pid = $this->getPatientId();

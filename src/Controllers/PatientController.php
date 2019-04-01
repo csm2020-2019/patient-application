@@ -11,6 +11,9 @@ use csm2020\PatientApp\Database\Database;
  */
 class PatientController
 {
+    /**
+     * PatientController constructor.
+     */
     public function __construct() {}
 
     /**

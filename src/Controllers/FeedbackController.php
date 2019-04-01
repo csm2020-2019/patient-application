@@ -11,10 +11,19 @@ use csm2020\PatientApp\Database\Database;
  */
 class FeedbackController
 {
+    /**
+     * Predetermined anonymous email address
+     */
     const ANONYMOUS = 'noreply@feedback.com';
 
+    /**
+     * @var string
+     */
     private $recipient;
 
+    /**
+     * FeedbackController constructor.
+     */
     public function __construct()
     {
         $this->recipient = Config::getConfig()['email-recipient'] ?? self::ANONYMOUS;

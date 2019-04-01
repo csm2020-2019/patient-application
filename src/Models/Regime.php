@@ -6,15 +6,47 @@ use csm2020\PatientApp\Database\Database;
 use PDO;
 use PDOException;
 
+/**
+ * Class Regime
+ * @package csm2020\PatientApp\Models
+ * @author Oliver Earl <ole4@aber.ac.uk>
+ */
 class Regime
 {
+    /**
+     * @var
+     */
     private $regimeId;
+    /**
+     * @var
+     */
     private $patientId;
+    /**
+     * @var
+     */
     private $gpId;
+    /**
+     * @var
+     */
     private $startDate;
+    /**
+     * @var
+     */
     private $endDate;
+    /**
+     * @var
+     */
     private $frequency;
 
+    /**
+     * Regime constructor.
+     * @param $regimeId
+     * @param $patientId
+     * @param $gpId
+     * @param $startDate
+     * @param $endDate
+     * @param $frequency
+     */
     private function __construct($regimeId, $patientId, $gpId, $startDate, $endDate, $frequency)
     {
         $this->regimeId = $regimeId;
@@ -25,8 +57,15 @@ class Regime
         $this->frequency = $frequency;
     }
 
+    /**
+     *
+     */
     private function __clone() {}
 
+    /**
+     * @param array $ingredients
+     * @return Regime
+     */
     public static function factory(array $ingredients)
     {
         $regime = new Regime(
@@ -40,6 +79,15 @@ class Regime
         return $regime;
     }
 
+    /**
+     * Get Regime by Regime ID
+     * @param $rid
+     * @param $pid
+     * @return bool|Regime|null
+     *
+     * Returns a Regime if a regime exists with this particular ID. Returns false if it doesn't exist. Returns null
+     * if any errors or sanitisation problems occur.
+     */
     public static function getRegimeByRegimeId($rid, $pid)
     {
         $rid = Database::sanitise($rid);
@@ -64,6 +112,14 @@ class Regime
         }
     }
 
+    /**
+     * Get Regimes By Patient ID
+     * @param $pid
+     * @return array|null
+     *
+     * Returns an array of regimes belonging to a particular patient. If they don't have any, this array is empty.
+     * If anything goes wrong, the method returns null.
+     */
     public static function getRegimesByPatientId($pid)
     {
         $pid = Database::sanitise($pid);
@@ -91,6 +147,9 @@ class Regime
         }
     }
 
+    /**
+     * @return array
+     */
     public function toAssoc()
     {
         return [

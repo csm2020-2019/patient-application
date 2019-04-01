@@ -8,8 +8,14 @@ namespace csm2020\PatientApp\Config;
  */
 class Config
 {
+    /**
+     * Settings location
+     */
     const CONFIG_LOCATION = __DIR__ . '/../../settings.ini';
 
+    /**
+     * @var array|bool
+     */
     private static $config;
 
     /**
@@ -35,6 +41,9 @@ class Config
         }
     }
 
+    /**
+     *
+     */
     private function __clone(){}
 
     /**

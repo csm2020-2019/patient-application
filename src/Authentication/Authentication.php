@@ -17,12 +17,27 @@ use csm2020\PatientApp\Database\Database;
  */
 class Authentication
 {
+    /**
+     * JSON that is re-used elsewhere in the class
+     */
     const UNAUTHORISED_JSON =   ['status' => 'error', 'msg' => 'Unauthorised'];
 
+    /**
+     * @var
+     */
     private $secretKey;
+    /**
+     * @var
+     */
     private $algorithm;
+    /**
+     * @var
+     */
     private $serverName;
 
+    /**
+     * Authentication constructor.
+     */
     public function __construct()
     {
         $config = Config::getConfig();
@@ -31,6 +46,10 @@ class Authentication
         $this->algorithm =  $config['auth-algorithm'];
         $this->serverName = $config['server-url'];
     }
+
+    /**
+     *
+     */
     private function __clone() {}
 
     /**

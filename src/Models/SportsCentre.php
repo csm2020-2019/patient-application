@@ -5,14 +5,42 @@ use csm2020\PatientApp\Database\Database;
 use PDO;
 use PDOException;
 
+/**
+ * Class SportsCentre
+ * @package csm2020\PatientApp\Models
+ * @author Oliver Earl <ole4@aber.ac.uk>
+ */
 class SportsCentre
 {
+    /**
+     * @var
+     */
     private $id;
+    /**
+     * @var
+     */
     private $name;
+    /**
+     * @var
+     */
     private $address;
+    /**
+     * @var
+     */
     private $availability;
+    /**
+     * @var
+     */
     private $userId;
 
+    /**
+     * SportsCentre constructor.
+     * @param $id
+     * @param $name
+     * @param $address
+     * @param $availability
+     * @param $userId
+     */
     private function __construct($id, $name, $address, $availability, $userId)
     {
         $this->id =             $id;
@@ -22,8 +50,14 @@ class SportsCentre
         $this->userId =         $userId;
     }
 
+    /**
+     *
+     */
     private function __clone() {}
 
+    /**
+     * @return array
+     */
     public function toAssoc()
     {
         return [
@@ -35,6 +69,10 @@ class SportsCentre
         ];
     }
 
+    /**
+     * @param array $ingredients
+     * @return SportsCentre
+     */
     public static function factory(array $ingredients)
     {
         $sportsCentre = new SportsCentre(
@@ -47,6 +85,14 @@ class SportsCentre
         return $sportsCentre;
     }
 
+    /**
+     * Get Sports Centre By Id
+     * @param $scid
+     * @return array|SportsCentre|null
+     *
+     * Returns an empty array if nothing can be found. Returns a Sports Centre if one can be found by its particular
+     * scid. Null on error.
+     */
     public static function getSportCentreById($scid)
     {
         $scid = Database::sanitise($scid);
@@ -68,6 +114,12 @@ class SportsCentre
         }
     }
 
+    /**
+     * Get All Sport Centres
+     * @return array|null
+     *
+     * Returns an array of sports centres on success.
+     */
     public static function getAllSportCentres()
     {
         $db = Database::getDatabase();
@@ -88,6 +140,14 @@ class SportsCentre
         }
     }
 
+    /**
+     * Remove Existing Appointments Method
+     * @param $pid
+     * @return bool|null
+     *
+     * Removes all 'appointments' attached to a patient ID. Ideally, there should be none or one. But this method will
+     * delete any it can find anyway. It returns true on success, and null on fail.
+     */
     public function removeExistingAppointments($pid)
     {
         if (!$pid) {
@@ -106,6 +166,14 @@ class SportsCentre
         }
     }
 
+    /**
+     * Set Appointment Method
+     * @param $pid
+     * @return bool|null
+     *
+     * This important method will take the current sport centre ID, along with a patient ID and insert it into the
+     * appointments table. Returns true on success.
+     */
     public function setAppointment($pid)
     {
         if (!$pid) {
