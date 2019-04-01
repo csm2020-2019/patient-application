@@ -1,4 +1,5 @@
 User-agent: *
+Disallow: /depreciated
 Disallow: /styles
 Disallow: /scripts
 Disallow: /templates
