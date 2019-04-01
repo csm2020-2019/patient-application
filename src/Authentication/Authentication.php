@@ -9,6 +9,12 @@ use PDO;
 use csm2020\PatientApp\Config\Config;
 use csm2020\PatientApp\Database\Database;
 
+/**
+ * Class Authentication
+ * @package csm2020\PatientApp\Authentication
+ * @author Oliver Earl <ole4@aber.ac.uk>
+ *
+ */
 class Authentication
 {
     const UNAUTHORISED_JSON =   ['status' => 'error', 'msg' => 'Unauthorised'];
@@ -27,6 +33,14 @@ class Authentication
     }
     private function __clone() {}
 
+    /**
+     * Login
+     * @author Oliver Earl <ole4@aber.ac.uk>
+     * @return array|null
+     *
+     * Helper method that passes the login details contained within POST to the main authentication method. Returns
+     * null if there's nothing inside the POST data.
+     */
     public function login()
     {
         if (!isset($_POST['username']) || !isset($_POST['current-password'])) {
@@ -36,19 +50,39 @@ class Authentication
     }
 
     // http://phpclicks.com/php-token-based-authentication/
+
+    /**
+     * Authenticate Method
+     * @param String $username
+     * @param String $password
+     * @return array|null
+     * @throws Exception
+     * @author Oliver Earl <ole4@aber.ac.uk>
+     *
+     * Carries out the main authentication legwork, including invoking the JWT library. After cleaning incoming login
+     * data, it retrieves the user from the database that matches the login information. From this information, a
+     * token is generated. This is included in a positive JSON response to the client that is extremely important as
+     * it will be used to authenticate all communication between front and back ends until the token expires, which
+     * is hardcoded as two hours. If anything goes wrong, it will return null - otherwise, an array of information,
+     * including the token subarray, ready to be translated into JSON.
+     *
+     * TODO: Refactoring to include User class
+     * This routine was written early into the backend's development, and directly accesses the database when it
+     * really should bring in the User class more like some of the other methods in this class do.
+     *
+     * TODO: Plaintext passwords
+     * Goes without saying. Hash passwords.
+     */
     public function authenticate(String $username, String $password)
     {
-        //$username = 'test';
-        //$password = 'test';
-
-        $sanitisedUsername = trim(stripslashes(htmlspecialchars(strip_tags($username))));
-        $sanitisedPassword = trim(stripslashes(htmlspecialchars(strip_tags($password))));
+        $sanitisedUsername = Database::sanitise($username);
+        $sanitisedPassword = Database::sanitise($password);
 
         // TODO: Hashing really should be included at some point. Plaintext passwords are not good.
         // Alas, this can't be brought in until the Java client has it implemented too.
         $db = Database::getDatabase();
         $statement = $db->prepare(
-            "SELECT * FROM user WHERE username = :username AND userPassword = :password AND userType = 'patient' LIMIT 1");
+"SELECT * FROM user WHERE username = :username AND userPassword = :password AND userType = 'patient' LIMIT 1");
         $statement->bindParam('username', $sanitisedUsername);
         $statement->bindParam('password', $sanitisedPassword);
         $statement->execute();
@@ -84,6 +118,20 @@ class Authentication
         return null;
     }
 
+    /**
+     * Token Authenticate Method
+     * @param String $token
+     * @return array|null
+     * @author Oliver Earl <ole4@aber.ac.uk>
+     *
+     * The next major piece of the puzzle in authentication is being able to authenticate based on the token provided
+     * when it is returned to the backend by responses sent from the frontend, which are normally stored as a cookie,
+     * unless this changes at any point.
+     *
+     * This method really relies on the magic behind the JWT library to handle the authentication. Why re-invent the
+     * wheel and all that. Should authentication fails, an exception is thrown, causing the method to return null and
+     * ultimately the application will return a 403 Forbidden.
+     */
     public function tokenAuthenticate(String $token)
     {
         try {
@@ -95,6 +143,17 @@ class Authentication
         }
     }
 
+    /**
+     * Get ID Method
+     * @param String $token
+     * @return string|null
+     *
+     * Extracts the User ID (uid) from a token in order to be used by other areas of the program. If a user ID for
+     * whatever reason can't be found in the token, it returns null, triggering an error down the line.
+     *
+     * TODO: Refactor using User class
+     * This was written early in the program's develop, and really should be tied properly into User objects.
+     */
     public function getId(String $token)
     {
         try {
