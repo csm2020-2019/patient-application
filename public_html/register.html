@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Register - Diabetes Assistant</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="styles/login.css">
+</head>
+<body>
+<main id="container">
+  <div class="login-form" id="register-form">
+    <p class="text-center" id="invite">Registration is by invitation only!</p>
+    <div id="scripts-enabled">
+      <form name="register" id="register" method="POST">
+        <h2 class="text-center">Register for Diabetes Assistant</h2>
+        <noscript id="no-script">
+          <p class="text-center">You must enable JavaScript and jQuery to use this app.</p>
+        </noscript>
+        <p>Please provide your information below: </p>
+        <div class="form-group">
+          <input type="text" id="username" name="username" class="form-control" placeholder="Username" autocomplete="username" minlength="5" maxlength="45" required>
+        </div>
+        <div class="form-group">
+          <input type="email" id=email" name="email" class="form-control" placeholder="Email" minlength="5" maxlength="45" required>
+        </div>
+        <div class="form-group">
+          <input type="password" id="password" name="password" class="form-control" placeholder="Password" minlength="5" maxlength="45" required>
+        </div>
+        <div class="form-group">
+          <input type="text" id=first_name" name="first_name" class="form-control" placeholder="First Name" minlength="1" maxlength="45" required>
+        </div>
+        <div class="form-group">
+          <input type="text" id=last_name" name="last_name" class="form-control" placeholder="Last Name" minlength="1" maxlength="45" required>
+        </div>
+        <div class="form-group">
+          <input type="hidden" name="pid" id="pid" required>
+          <button type="submit" class="btn btn-primary btn-block">Register</button>
+          <a href="index.html" class="btn btn-secondary btn-block">Log In</a>
+        </div>
+      </form>
+      <p id="debug"></p>
+    </div>
+  </div>
+</main>
+
+<!-- Scripts -->
+<script type="text/javascript"
+        src="http://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+<script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/js-cookie@2.2.0/src/js.cookie.min.js"></script>
+<script type="text/javascript"
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script type="text/javascript" src="scripts/register.js"></script>
+</body>
+</html>

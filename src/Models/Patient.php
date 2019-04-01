@@ -111,16 +111,19 @@ class Patient
         $email =            $this->getEmail();
         $sub =              $this->getSubscription();
         $pid =              $this->getPatientId();
+        $uid =              $this->getUserId();
 
         try {
             $stmt = $db->prepare('UPDATE patient_records SET 
                            patient_address = :address, 
                            patient_email = :email,
-                           patient_email_prescription = :sub WHERE patient_id = :pid');
+                           patient_email_prescription = :sub,
+                           userId = :uid WHERE patient_id = :pid');
             $stmt->bindParam(':address', $address);
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':sub', $sub);
             $stmt->bindParam(':pid', $pid);
+            $stmt->bindParam(':uid', $uid);
             $stmt->execute();
         } catch (PDOException $e) {
             return null;

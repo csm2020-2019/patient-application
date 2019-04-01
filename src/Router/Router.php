@@ -6,6 +6,7 @@ use csm2020\PatientApp\Controllers\FeedbackController;
 use csm2020\PatientApp\Controllers\PatientController;
 use csm2020\PatientApp\Controllers\RegimeController;
 use csm2020\PatientApp\Controllers\SportsCentreController;
+use csm2020\PatientApp\Controllers\UserController;
 use csm2020\PatientApp\Models\Patient;
 use csm2020\PatientApp\Models\User;
 
@@ -34,9 +35,25 @@ class Router
         if (!isset($_POST['token']) && isset($_GET['token'])) {
             $_POST = $_GET;
         }
+        if (!isset($_POST['pid']) && isset($_GET['pid'])) {
+            $_POST = $_GET;
+        }
 
         // Check if there's no token, if so, we need to do initial authentication
         if (!isset($_POST['token'])) {
+            if (isset($_POST['pid'])) {
+                $controller = new UserController();
+                if (!$controller->register(
+                    $_POST['username'],
+                    $_POST['email'],
+                    $_POST['password'],
+                    $_POST['first_name'],
+                    $_POST['last_name'],
+                    $_POST['pid'])) {
+                    return $this->error(self::SUBMISSION_FAILURE);
+                }
+                return $this->success(['registration' => true], 200);
+            }
             $loginCheck = $this->auth->login();
             if (!$loginCheck) {
                 return $this->error(self::UNAUTHORISED);

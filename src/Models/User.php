@@ -61,6 +61,29 @@ class User
         return self::factory($ingredients);
     }
 
+    public static function register($ingredients)
+    {
+        if (!$ingredients) {
+            return null;
+        }
+        $db = Database::getDatabase();
+        $userType = 'patient';
+        try {
+            $stmt = $db->prepare('INSERT INTO user (username, userPassword, userEmail, userFirstName, userLastName, userType) VALUES (:username, :password, :email, :firstName, :lastName, :userType)');
+            $stmt->bindParam(':username',   $ingredients['username']);
+            $stmt->bindParam(':password',   $ingredients['password']);
+            $stmt->bindParam(':email',      $ingredients['email']);
+            $stmt->bindParam(':firstName',  $ingredients['firstName']);
+            $stmt->bindParam(':lastName',   $ingredients['lastName']);
+            $stmt->bindParam(':userType',   $userType);
+            $stmt->execute();
+
+            return $db->lastInsertId();
+        } catch (PDOException $e) {
+            return null;
+        }
+    }
+
     public function getDisplayableInfo()
     {
         return [
