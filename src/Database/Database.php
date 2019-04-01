@@ -23,6 +23,7 @@ class Database
             } catch (PDOException $ex) {
                 // TODO: Better error handling
                 echo 'Database error has occurred.';
+                echo $ex->getMessage();
                 die();
             }
         }

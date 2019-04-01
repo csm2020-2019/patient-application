@@ -36,7 +36,7 @@ class Authentication
     }
 
     // http://phpclicks.com/php-token-based-authentication/
-    private function authenticate(String $username, String $password)
+    public function authenticate(String $username, String $password)
     {
         //$username = 'test';
         //$password = 'test';
