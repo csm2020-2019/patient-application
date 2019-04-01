@@ -11,7 +11,7 @@ Password: something
 License: MIT
 Libraries:
 Backend:
-- PHP-JWT: BSD 3 License
+- PHP-JWT: BSD-3
 Frontend:
 - Bootstrap 4: MIT
 - jQuery: MIT
