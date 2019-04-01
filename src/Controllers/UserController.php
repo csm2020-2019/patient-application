@@ -20,6 +20,9 @@ class UserController
         if (!$patient) {
             return null;
         }
+        if ($patient->getUserId() === null || $patient->getUserId() === 1) {
+         return null;
+        }
         Database::sanitise($username);
         Database::sanitise($email);
         Database::sanitise($password);
