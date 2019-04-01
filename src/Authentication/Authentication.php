@@ -34,10 +34,9 @@ class Authentication
     private function __clone() {}
 
     /**
-     * Login
-     * @author Oliver Earl <ole4@aber.ac.uk>
+     * Login Method
      * @return array|null
-     *
+     * @throws Exception
      * Helper method that passes the login details contained within POST to the main authentication method. Returns
      * null if there's nothing inside the POST data.
      */
@@ -57,7 +56,6 @@ class Authentication
      * @param String $password
      * @return array|null
      * @throws Exception
-     * @author Oliver Earl <ole4@aber.ac.uk>
      *
      * Carries out the main authentication legwork, including invoking the JWT library. After cleaning incoming login
      * data, it retrieves the user from the database that matches the login information. From this information, a
@@ -122,7 +120,6 @@ class Authentication
      * Token Authenticate Method
      * @param String $token
      * @return array|null
-     * @author Oliver Earl <ole4@aber.ac.uk>
      *
      * The next major piece of the puzzle in authentication is being able to authenticate based on the token provided
      * when it is returned to the backend by responses sent from the frontend, which are normally stored as a cookie,
